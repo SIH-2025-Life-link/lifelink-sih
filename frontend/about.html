@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us - LifeLink</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add.html">Add Relief</a></li>
+                <li><a href="check.html">Check Relief</a></li>
+                <li><a href="about.html" class="active">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section for About Us -->
+    <section class="hero fade-up">
+        <canvas id="bgCanvas" aria-hidden="true"></canvas>
+        <div class="hero-content">
+            <h1>About LifeLink</h1>
+            <p class="tagline">Dedicated to Transparent and Accountable Disaster Relief</p>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about fade-up">
+        <h2>Meet Our Team</h2>
+        <p class="about-intro">
+            LifeLink is a student-driven initiative dedicated to making disaster relief transparent and accountable.<br>
+            We leverage blockchain technology to ensure aid reaches those who need it most, and that every transaction is traceable.
+        </p>
+
+        <div class="team-cards">
+            <!-- Team Member 1 -->
+            <div class="team-card fade-up">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mayank Sharma">
+                <h3>Mayank Sharma</h3>
+                <p>Leader & Backend Developer – Coordinates the team and leads blockchain integration.</p>
+            </div>
+
+            <!-- Team Member 2 -->
+            <div class="team-card fade-up">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Kumkum">
+                <h3>Kumkum</h3>
+                <p>Research & Frontend Support – Collects data, prepares documentation, and assists in UI design.</p>
+            </div>
+
+            <!-- Team Member 3 -->
+            <div class="team-card fade-up">
+                <img src="https://randomuser.me/api/portraits/men/77.jpg" alt="Prateek">
+                <h3>Prateek</h3>
+                <p>Research & Testing – Assists in research and thoroughly tests the platform for bugs.</p>
+            </div>
+
+            <!-- Team Member 4 -->
+            <div class="team-card fade-up">
+                <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Shyam">
+                <h3>Shyam</h3>
+                <p>Backend & Blockchain – Builds backend APIs and smart contract functionality.</p>
+            </div>
+
+            <!-- Team Member 5 -->
+            <div class="team-card fade-up">
+                <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="Ayushman">
+                <h3>Ayushman</h3>
+                <p>Blockchain & Design – Develops smart contracts and contributes to UI/UX design.</p>
+            </div>
+
+            <!-- Team Member 6 -->
+            <div class="team-card fade-up">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Arya">
+                <h3>Arya</h3>
+                <p>Frontend & Pitch – Designs forms, builds the UI, and prepares the pitch presentation.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 LifeLink. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Fade-up animation on scroll
+        function showOnScroll() {
+            document.querySelectorAll('.fade-up').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 60) {
+                    el.classList.add('show');
+                }
+            });
+        }
+        window.addEventListener('scroll', showOnScroll);
+        window.addEventListener('DOMContentLoaded', showOnScroll);
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

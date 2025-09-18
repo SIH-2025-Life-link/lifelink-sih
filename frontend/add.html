@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Relief – Disaster Relief Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+</head>
+<body class="fade-out">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ReliefConnect</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="add.html" class="active">Add Relief</a></li>
+      <li><a href="check.html">Check Relief</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero small-hero">
+    <div class="hero-content">
+      <h1 class="fade-up">Add Relief</h1>
+      <p class="fade-up tagline">Submit relief resource details here.</p>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <main>
+    <section class="content fade-up" style="max-width: 420px; margin: 40px auto 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 32px 28px;">
+      <h2 style="font-family: 'Montserrat', sans-serif; color: #004aad; margin-bottom: 18px;">Relief Submission Form</h2>
+      <form class="relief-form">
+        <label for="reliefType">Relief Type:</label>
+        <input type="text" id="reliefType" name="reliefType" placeholder="Food, Shelter, Medical..." required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="City / Region" required>
+
+        <label for="contact">Contact Info:</label>
+        <input type="text" id="contact" name="contact" placeholder="Phone or Email" required>
+
+        <label for="details">Additional Details:</label>
+        <textarea id="details" name="details" rows="4" placeholder="Any extra info..."></textarea>
+
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2024 ReliefConnect. All rights reserved.
+  </footer>
+
+  <script>
+    // Fade-in animation for body and fade-up elements
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.remove('fade-out');
+      document.querySelectorAll('.fade-up').forEach(el => {
+        setTimeout(() => el.classList.add('show'), 200);
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

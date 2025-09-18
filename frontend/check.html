@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Relief – Disaster Relief Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+</head>
+<body class="fade-out">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ReliefConnect</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="add.html">Add Relief</a></li>
+      <li><a href="check.html" class="active">Check Relief</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero small-hero">
+    <div class="hero-content">
+      <h1 class="fade-up">Check Relief</h1>
+      <p class="tagline fade-up">Find available relief resources in your area.</p>
+    </div>
+  </section>
+
+  <!-- Search Section -->
+  <main>
+    <section class="content fade-up" style="max-width: 500px; margin: 0 auto;">
+      <h2>Search Relief Resources</h2>
+      <form class="relief-form" autocomplete="off" style="margin-bottom: 32px;">
+        <label for="searchLocation">Enter Location:</label>
+        <input type="text" id="searchLocation" name="searchLocation" placeholder="City / Region" required>
+        <button type="submit" class="btn">Search</button>
+      </form>
+
+      <div class="results fade-up">
+        <h3>Available Relief</h3>
+        <ul class="relief-list">
+          <li><strong>Food Camp</strong> – Delhi – Contact: +91-9876543210</li>
+          <li><strong>Medical Aid</strong> – Mumbai – Contact: +91-9123456780</li>
+          <li><strong>Shelter</strong> – Chennai – Contact: +91-9988776655</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2024 ReliefConnect. All rights reserved.
+  </footer>
+
+  <script>
+    // Fade-in transition for body
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.remove('fade-out');
+      // Animate fade-up elements
+      document.querySelectorAll('.fade-up').forEach(el => {
+        setTimeout(() => el.classList.add('show'), 200);
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

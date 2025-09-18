@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LifeLink - Transparent Disaster Relief</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fade-out">
+  <!-- Navigation -->
+  <header class="navbar">
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="add.html">Add Relief</a></li>
+        <li><a href="check.html">Check Relief</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
+    <div class="hero-content fade-up">
+      <h1>LifeLink</h1>
+      <p class="tagline">Transparent Disaster Relief Tracking using Blockchain</p>
+      <a href="add.html" class="btn" aria-label="Get Started with LifeLink">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Our Values Section -->
+  <section class="values fade-up">
+    <h2>Our Core Values</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Transparency</h3>
+        <p>Every relief operation is tracked on blockchain for trust and accountability.</p>
+      </div>
+      <div class="card">
+        <h3>Efficiency</h3>
+        <p>Ensure timely and fair distribution of aid during disasters.</p>
+      </div>
+      <div class="card">
+        <h3>Impact</h3>
+        <p>Empowering citizens and NGOs with reliable, real-time information.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Section -->
+  <section class="showcase fade-up">
+    <h2>Relief in Action</h2>
+    <div class="images">
+      <figure>
+        <img src="https://s30991.pcdn.co/news/wp-content/uploads/2022/07/Food-stress.jpg" alt="Flood Relief">
+        <figcaption>Flood Relief</figcaption>
+      </figure>
+      <figure>
+        <img src="https://content.jdmagicbox.com/comp/def_content_category/medical-aid-distributors/medical-aid-1-medical-aid-distributors-1-yr42g.jpg" alt="Medical Aid">
+        <figcaption>Medical Aid</figcaption>
+      </figure>
+      <figure>
+        <img src="https://www.feesers.com/wp-content/uploads/2023/09/01-A-Guide-to-the-Types-of-Food-Service-distribution.jpg" alt="Food Distribution">
+        <figcaption>Food Distribution</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="fade-up">
+    <p>© 2025 LifeLink. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Fade-in effect for body
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.remove('fade-out');
+      // Fade-up animation for sections
+      document.querySelectorAll('.fade-up').forEach(el => {
+        setTimeout(() => el.classList.add('show'), 200);
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
