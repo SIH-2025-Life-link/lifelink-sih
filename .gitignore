@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -137,3 +138,6 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+=======
+"node_modules\n.env\n.DS_Store\n/build\n/dist\n/contracts/artifacts\n/contracts/cache\nfrontend/node_modules\nbackend/node_modules" 
+>>>>>>> 961cea0 (chore: repo skeleton)
