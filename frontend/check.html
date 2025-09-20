@@ -2,67 +2,175 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check Relief – Disaster Relief Portal</title>
+  <title>LifeLink - Check & Verify Relief</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
 </head>
 <body class="fade-out">
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">ReliefConnect</div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="add.html">Add Relief</a></li>
-      <li><a href="check.html" class="active">Check Relief</a></li>
-      <li><a href="about.html">About Us</a></li>
-    </ul>
-  </nav>
+  <!-- Navigation -->
+  <header class="navbar" role="banner">
+    <nav aria-label="Main navigation"></nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="add.html">Add Relief</a></li>
+        <li><a href="check.html" class="active" aria-current="page">Check Relief</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- Hero -->
-  <section class="hero small-hero">
-    <div class="hero-content">
-      <h1 class="fade-up">Check Relief</h1>
-      <p class="tagline fade-up">Find available relief resources in your area.</p>
-    </div>
-  </section>
-
-  <!-- Search Section -->
   <main>
-    <section class="content fade-up" style="max-width: 500px; margin: 0 auto;">
-      <h2>Search Relief Resources</h2>
-      <form class="relief-form" autocomplete="off" style="margin-bottom: 32px;">
-        <label for="searchLocation">Enter Location:</label>
-        <input type="text" id="searchLocation" name="searchLocation" placeholder="City / Region" required>
-        <button type="submit" class="btn">Search</button>
-      </form>
+    <section class="verify-section fade-up" aria-labelledby="verify-heading"></section>
+      <h2 id="verify-heading">Relief Verification &amp; Audit</h2>
 
-      <div class="results fade-up">
-        <h3>Available Relief</h3>
-        <ul class="relief-list">
-          <li><strong>Food Camp</strong> – Delhi – Contact: +91-9876543210</li>
-          <li><strong>Medical Aid</strong> – Mumbai – Contact: +91-9123456780</li>
-          <li><strong>Shelter</strong> – Chennai – Contact: +91-9988776655</li>
-        </ul>
+      <!-- Login Panel -->
+      <div id="loginPanel" class="card" aria-live="polite">
+        <h3>Secure Login <span aria-label="for NGO, Government, or Admin" title="NGO / Gov’t / Admin">🔒</span></h3>
+        <form id="loginForm" autocomplete="on">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" name="username" placeholder="Username" autocomplete="username" required>
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" name="password" placeholder="Password" autocomplete="current-password" required>
+          <button class="btn" type="submit">Login</button>
+        </form>
+        <p id="loginMessage" role="alert"></p>
+      </div>
+
+      <!-- Public Verification -->
+      <div id="verifyPanel" class="card" aria-live="polite">
+        <h3>Verify Relief Record <span title="Public Verification">🔍</span></h3>
+        <form id="verifyForm" autocomplete="off">
+          <label for="txHashInput">Transaction Hash</label>
+          <input type="text" id="txHashInput" name="txHash" placeholder="Enter Transaction Hash" required>
+          <button class="btn" type="submit">Verify</button>
+        </form>
+        <div id="verifyResult" class="result-box" tabindex="0"></div>
+      </div>
+
+      <!-- Audit Trail -->
+      <div id="auditPanel" class="card" style="display:none;" aria-live="polite">
+        <h3>Audit Trail <span title="Authorized Roles Only">🛡️</span></h3>
+        <button class="btn" id="loadAuditBtn" type="button">Load Audit Trail</button>
+        <pre id="auditResult" class="result-box" tabindex="0"></pre>
       </div>
     </section>
   </main>
 
-  <footer>
-    &copy; 2024 ReliefConnect. All rights reserved.
+  <footer class="fade-up">
+    <p>© 2025 LifeLink. All rights reserved.</p>
   </footer>
 
   <script>
-    // Fade-in transition for body
-    window.addEventListener('DOMContentLoaded', () => {
-      document.body.classList.remove('fade-out');
-      // Animate fade-up elements
-      document.querySelectorAll('.fade-up').forEach(el => {
-        setTimeout(() => el.classList.add('show'), 200);
+    const API_BASE = "http://localhost:5000";
+    let authToken = null;
+    let currentRole = null;
+
+    function showPanelsAfterLogin() {
+      document.getElementById("loginPanel").style.display = "none";
+      if (["admin", "auditor", "govt"].includes(currentRole)) {
+        document.getElementById("auditPanel").style.display = "block";
+      }
+    }
+
+    async function login(username, password) {
+      const msg = document.getElementById("loginMessage");
+      msg.textContent = "";
+      try {
+        const resp = await fetch(API_BASE + "/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        const j = await resp.json();
+        if (resp.ok) {
+          authToken = j.token;
+          currentRole = j.role || null;
+          msg.textContent = "✅ Logged in as: " + currentRole;
+          showPanelsAfterLogin();
+        } else {
+          msg.textContent = "❌ Login failed: " + (j.message || "Unknown error");
+        }
+      } catch (err) {
+        msg.textContent = "⚠️ Server error: " + err.message;
+      }
+    }
+
+    async function verifyRecord(txHash) {
+      const result = document.getElementById("verifyResult");
+      result.textContent = "";
+      try {
+        const resp = await fetch(`${API_BASE}/verifyRecord/${encodeURIComponent(txHash)}`);
+        const j = await resp.json();
+        if (resp.ok) {
+          let out = `<h4>✅ Record Found (${j.type ? j.type.toUpperCase() : "RECORD"})</h4>`;
+          for (const [key, value] of Object.entries(j.data || {})) {
+            out += `<p><strong>${key}:</strong> ${value}</p>`;
+          }
+          out += `<p><strong>Transaction Hash:</strong> ${txHash}</p>`;
+          out += `<p><a href="${API_BASE}/verifyRecord/${txHash}" target="_blank" rel="noopener">🔗 Verify on Blockchain</a></p>`;
+          result.innerHTML = out;
+        } else {
+          result.textContent = "❌ Error: " + (j.message || "Not found");
+        }
+      } catch (err) {
+        result.textContent = "⚠️ Server error: " + err.message;
+      }
+    }
+
+    async function loadAuditTrail() {
+      const result = document.getElementById("auditResult");
+      result.textContent = "";
+      if (!authToken) {
+        alert("Login required to view audit trail");
+        return;
+      }
+      try {
+        const resp = await fetch(API_BASE + "/auditTrail", {
+          method: "GET",
+          headers: { "Authorization": "Bearer " + authToken }
+        });
+        const j = await resp.json();
+        if (resp.ok) {
+          result.textContent = JSON.stringify(j, null, 2);
+        } else {
+          result.textContent = "❌ Error: " + (j.message || "Not found");
+        }
+      } catch (err) {
+        result.textContent = "⚠️ Server error: " + err.message;
+      }
+    }
+
+    // Event listeners for forms and buttons
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.remove("fade-out");
+      document.querySelectorAll(".fade-up").forEach(el => {
+        setTimeout(() => el.classList.add("show"), 200);
       });
+
+      document.getElementById("loginForm").addEventListener("submit", e => {
+        e.preventDefault();
+        const username = document.getElementById("loginUsername").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        if (!username || !password) {
+          document.getElementById("loginMessage").textContent = "Provide both username & password";
+          return;
+        }
+        login(username, password);
+      });
+
+      document.getElementById("verifyForm").addEventListener("submit", e => {
+        e.preventDefault();
+        const txHash = document.getElementById("txHashInput").value.trim();
+        if (!txHash) {
+          document.getElementById("verifyResult").textContent = "Please enter a transaction hash";
+          return;
+        }
+        verifyRecord(txHash);
+      });
+
+      document.getElementById("loadAuditBtn").addEventListener("click", loadAuditTrail);
     });
   </script>
-  <script src="script.js"></script>
 </body>
 </html>

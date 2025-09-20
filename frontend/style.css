@@ -305,3 +305,153 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
+/* ===================
+  Relief Verification & Audit Page
+=================== */
+
+/* Section container */
+.verify-section {
+  max-width: 700px;
+  margin: 48px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: stretch;
+  justify-content: flex-start;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.verify-section h2 {
+  font-size: 2rem;
+  margin-bottom: 18px;
+  color: #004aad;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Card panels */
+.verify-section .card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 28px 24px 22px 24px;
+  margin-bottom: 0;
+  text-align: left;
+  transition: box-shadow 0.2s;
+  position: relative;
+}
+
+.verify-section .card:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.verify-section .card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: #004aad;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.verify-section .btn {
+  margin-top: 10px;
+  min-width: 110px;
+}
+
+/* Forms */
+.verify-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.verify-section label {
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #222;
+}
+
+.verify-section input[type="text"],
+.verify-section input[type="password"] {
+  padding: 10px 12px;
+  border: 1px solid #c7d2e3;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: 'Lato', sans-serif;
+  background: #f8fafd;
+  transition: border 0.2s;
+}
+
+.verify-section input[type="text"]:focus,
+.verify-section input[type="password"]:focus {
+  border-color: #004aad;
+  box-shadow: 0 0 0 2px rgba(0,74,173,0.10);
+}
+
+/* Result boxes */
+.result-box {
+  margin-top: 14px;
+  background: #f4f7fb;
+  border-radius: 7px;
+  padding: 14px 12px;
+  min-height: 32px;
+  font-size: 1rem;
+  color: #234;
+  word-break: break-word;
+  outline: none;
+}
+
+.result-box h4 {
+  color: #008a3a;
+  margin-bottom: 8px;
+  font-size: 1.08rem;
+}
+
+.result-box p {
+  margin: 4px 0;
+  font-size: 0.98rem;
+}
+
+.result-box a {
+  color: #004aad;
+  text-decoration: underline;
+  font-size: 0.97rem;
+}
+
+#loginMessage {
+  margin-top: 10px;
+  font-size: 0.97rem;
+  color: #b20000;
+  min-height: 20px;
+}
+
+#auditPanel .btn {
+  margin-bottom: 12px;
+}
+
+#auditResult {
+  background: #f4f7fb;
+  border-radius: 7px;
+  padding: 12px;
+  font-size: 0.97rem;
+  color: #234;
+  min-height: 40px;
+  max-height: 320px;
+  overflow: auto;
+  margin-top: 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .verify-section {
+   padding: 0 8px;
+   max-width: 98vw;
+  }
+  .verify-section .card {
+   padding: 18px 8px 14px 8px;
+  }
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LifeLink - Funds Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body class="fade-out">
+  <header class="navbar">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="add.html">Add Relief</a></li>
+        <li><a href="check.html">Check Relief</a></li>
+        <li><a href="funds.html" class="active">Funds Portal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero fade-up">
+    <h1>Funds Portal</h1>
+    <p class="tagline">Secure Donations for Disaster Relief</p>
+  </section>
+
+  <section class="fade-up">
+    <h2>1. Initialize Secure Session</h2>
+    <input type="text" id="userId" placeholder="Enter your User ID">
+    <button onclick="initSession()">Start Secure Session</button>
+    <p id="sessionInfo"></p>
+  </section>
+
+  <section class="fade-up">
+    <h2>2. Donate</h2>
+    <input type="number" id="amount" placeholder="Amount (INR)">
+    <input type="text" id="purpose" placeholder="Purpose (optional)">
+    <input type="text" id="donorName" placeholder="Your Name">
+    <input type="email" id="donorEmail" placeholder="Your Email">
+    <button onclick="donateFunds()">Donate</button>
+    <p id="donateResult"></p>
+  </section>
+
+  <section class="fade-up">
+    <h2>3. View Ledger (for demo)</h2>
+    <button onclick="viewLedger()">View All Donations</button>
+    <pre id="ledger"></pre>
+  </section>
+
+  <footer>
+    <p>© 2025 LifeLink. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const API = "http://localhost:5000"; // backend API URL
+
+    let userId = null, mac = null, token = null;
+
+    async function initSession() {
+      const inputId = document.getElementById("userId").value.trim();
+      if (!inputId) return alert("Enter a User ID");
+
+      const res = await fetch(API + "/fundsPortal/init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: inputId })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        userId = data.userId;
+        mac = data.mac;
+        token = data.token;
+        document.getElementById("sessionInfo").textContent =
+          `Session started. MAC: ${mac}, Expires: ${new Date(data.expiresAt).toLocaleString()}`;
+      } else {
+        alert(data.message || "Error starting session");
+      }
+    }
+
+    async function donateFunds() {
+      if (!userId || !mac || !token) return alert("Start a session first!");
+      const amount = document.getElementById("amount").value;
+      const purpose = document.getElementById("purpose").value;
+      const donorInfo = {
+        name: document.getElementById("donorName").value,
+        email: document.getElementById("donorEmail").value
+      };
+
+      const res = await fetch(API + "/fundsPortal/donate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+          "x-session-mac": mac,
+          "x-session-token": token
+        },
+        body: JSON.stringify({ amount, purpose, donorInfo })
+      });
+      const data = await res.json();
+      document.getElementById("donateResult").textContent =
+        res.ok ? "Donation successful. Tx ID: " + data.txId : "Error: " + data.message;
+    }
+
+    async function viewLedger() {
+      if (!userId || !mac || !token) return alert("Start a session first!");
+      const res = await fetch(API + "/fundsPortal/ledger", {
+        method: "GET",
+        headers: {
+          "x-user-id": userId,
+          "x-session-mac": mac,
+          "x-session-token": token
+        }
+      });
+      const data = await res.json();
+      document.getElementById("ledger").textContent =
+        res.ok ? JSON.stringify(data, null, 2) : "Error: " + data.message;
+    }
+  </script>
+</body>
+</html>
