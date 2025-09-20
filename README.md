@@ -15,3 +15,28 @@ It ensures transparency, prevents duplication, and helps NGOs & governments deli
 1. Clone the repo:
    ```bash
    git clone https://github.com/MayankSharma-2812/lifelink-sih.git
+
+
+# LifeLink 🚑 Blockchain + Cybersecurity Backend
+
+A blockchain-powered backend for **transparent disaster relief tracking**.
+
+---
+
+## 🚀 Features
+- Record **donations** (on-chain + local ledger).
+- Record **dispatches** with unique tracking ID (pseudo MAC-based hash).
+- **Verification layer**: QR code → verify donation/supply.
+- **Maps API**: GeoJSON endpoint for live dispatch tracking.
+- **Admin portal**: Login, view/approve relief forms.
+- **Cybersecurity**: JWT auth, bcrypt, role-based access, helmet, rate-limiting.
+- **Audit trail**: Tamper-proof history export.
+
+---
+
+## 📦 Installation
+
+```bash
+git clone <repo>
+cd lifelink-sih
+npm install
