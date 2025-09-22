@@ -36,7 +36,23 @@ const WALLET_PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY || "";
 const LEDGER_FILE = path.join(__dirname, "ledger.json");
 
 // Ensure ledger file exists
-if (!fs.existsSync(LEDGER_FILE)) fs.writeJsonSync(LEDGER_FILE, { donations: [], supplies: [] }, { spaces: 2 });
+if (!fs.existsSync(LEDGER_FILE)) {
+  const initialLedger = {
+    metadata: {
+      lastUpdated: new Date().toISOString(),
+      version: "1.0"
+    },
+    donations: [],
+    supplies: [],
+    statistics: {
+      totalDonations: 0,
+      totalSupplies: 0,
+      lastDonationDate: null,
+      lastSupplyDate: null
+    }
+  };
+  fs.writeJsonSync(LEDGER_FILE, initialLedger, { spaces: 2 });
+}
 
 // Rate limiter
 app.use(rateLimit({ windowMs: 60 * 1000, max: 200 }));
@@ -90,8 +106,30 @@ function generateTrackingId(payload) {
   return "0x" + hash;
 }
 
+function generateId(prefix) {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const random = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+  return `${prefix}_${year}${month}${day}${random}`;
+}
+
 async function appendLedger(type, record) {
   const ledger = await fs.readJson(LEDGER_FILE);
+  const now = new Date().toISOString();
+  
+  // Update metadata
+  ledger.metadata.lastUpdated = now;
+  
+  if (type === 'donations') {
+    ledger.statistics.totalDonations += (record.details?.amount || 0);
+    ledger.statistics.lastDonationDate = now;
+  } else if (type === 'supplies') {
+    ledger.statistics.totalSupplies += 1;
+    ledger.statistics.lastSupplyDate = now;
+  }
+  
   ledger[type].push(record);
   await fs.writeJson(LEDGER_FILE, ledger, { spaces: 2 });
 }
@@ -119,6 +157,21 @@ function requireRole(...roles) {
 // ------------ Routes ------------
 
 app.get("/", (req, res) => res.send("LifeLink Backend running"));
+
+// Audit Trail Route
+app.get("/audit-trail", async (req, res) => {
+  try {
+    const ledger = await fs.readJson(LEDGER_FILE);
+    res.json({
+      donations: ledger.donations,
+      supplies: ledger.supplies,
+      statistics: ledger.statistics
+    });
+  } catch (error) {
+    console.error("Error fetching audit trail:", error);
+    res.status(500).json({ message: "Error fetching audit trail data" });
+  }
+});
 
 // ----------- Auth & Admin routes ------------
 app.post("/auth/register", async (req, res) => {
@@ -153,17 +206,40 @@ app.get("/admin/reliefs", authMiddleware, requireRole("admin", "govt"), async (r
 // ----------- Donations ------------
 app.post("/donate", authMiddleware, requireRole("ngo", "admin"), async (req, res) => {
   try {
-    const { donorName, amount, purpose } = req.body;
-    const payload = { donorName, amount, purpose, createdBy: req.user.username, ts: Date.now() };
-    const txId = generateTrackingId(payload);
+    const { donorName, amount, purpose, paymentMethod = "direct" } = req.body;
+    const txId = generateTrackingId({ donorName, amount, purpose });
+    const now = new Date().toISOString();
 
-    let onchain = null;
+    let blockchain = null;
     if (contract) {
       const tx = await contract.recordDonation(donorName, ethers.parseUnits(String(amount), 'ether'), purpose, txId);
-      onchain = { txHash: tx.hash, txId };
+      blockchain = {
+        txHash: tx.hash,
+        txId: txId,
+        network: "mumbai",
+        status: "confirmed"
+      };
     }
 
-    const record = { id: txId, donorName, amount, purpose, createdBy: req.user.username, ts: new Date().toISOString(), onchain };
+    const record = {
+      id: generateId("DON"),
+      type: "monetary",
+      details: {
+        donorName,
+        amount,
+        currency: "INR",
+        purpose,
+        paymentMethod
+      },
+      tracking: {
+        status: blockchain ? "completed" : "pending",
+        createdBy: req.user.username,
+        createdAt: now,
+        verificationId: txId
+      },
+      blockchain
+    };
+    
     await appendLedger("donations", record);
 
     const verifyUrl = `${req.protocol}://${req.get("host")}/verifyRecord/${txId}`;
@@ -179,17 +255,54 @@ app.post("/donate", authMiddleware, requireRole("ngo", "admin"), async (req, res
 // ----------- Dispatch ------------
 app.post("/dispatch", authMiddleware, requireRole("ngo", "admin"), async (req, res) => {
   try {
-    const { item, quantity, from, to, lat, lng } = req.body;
-    const payload = { item, quantity, from, to, lat, lng, createdBy: req.user.username };
-    const trackingId = generateTrackingId(payload);
+    const { item, quantity, from, to, lat, lng, category = "essential", unit = "packages" } = req.body;
+    const trackingId = generateTrackingId({ item, quantity, from, to });
+    const now = new Date().toISOString();
 
-    let onchain = null;
+    let blockchain = null;
     if (contract) {
       const tx = await contract.recordDispatch(item, quantity, from, to, trackingId);
-      onchain = { txHash: tx.hash, trackingId };
+      blockchain = {
+        txHash: tx.hash,
+        trackingId,
+        network: "mumbai",
+        status: "confirmed"
+      };
     }
 
-    const record = { trackingId, item, quantity, from, to, location: lat && lng ? { lat, lng } : null, createdBy: req.user.username, ts: new Date().toISOString(), onchain };
+    const record = {
+      id: generateId("SUP"),
+      type: category.toLowerCase(),
+      details: {
+        item,
+        quantity,
+        unit,
+        category
+      },
+      logistics: {
+        from: {
+          name: from,
+          type: "warehouse"
+        },
+        to: {
+          name: to,
+          type: "relief_center"
+        },
+        location: lat && lng ? {
+          lat,
+          lng,
+          locationName: to
+        } : null
+      },
+      tracking: {
+        status: "in_transit",
+        trackingId,
+        createdBy: req.user.username,
+        createdAt: now
+      },
+      blockchain
+    };
+    
     await appendLedger("supplies", record);
 
     const verifyUrl = `${req.protocol}://${req.get("host")}/verifyRecord/${trackingId}`;

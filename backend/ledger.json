@@ -1,44 +1,112 @@
 {
+  "metadata": {
+    "lastUpdated": "2025-09-22T10:12:20.939Z",
+    "version": "1.0"
+  },
   "donations": [
     {
-      "id": "d123",
-      "donorName": "John Doe",
-      "amount": 1000,
-      "purpose": "Flood Relief",
-      "createdBy": "admin",
-      "ts": "2025-09-22T10:00:00Z",
-      "onchain": {
+      "id": "DON_2025092201",
+      "type": "monetary",
+      "details": {
+        "donorName": "John Doe",
+        "amount": 1000,
+        "currency": "INR",
+        "purpose": "Flood Relief",
+        "paymentMethod": "direct"
+      },
+      "tracking": {
+        "status": "completed",
+        "createdBy": "admin",
+        "createdAt": "2025-09-22T10:00:00Z",
+        "verificationId": "d123"
+      },
+      "blockchain": {
         "txHash": "0x123",
-        "txId": "d123"
+        "txId": "d123",
+        "network": "mumbai",
+        "status": "confirmed"
       }
     },
     {
-      "id": "0x79b91a7820a58ac199e4d07d3063381da5b9df7e6d1b806ffd65270050bb58c9",
-      "donorName": "John Doe",
-      "amount": 1000,
-      "purpose": "Flood Relief",
-      "createdBy": "admin",
-      "ts": "2025-09-22T09:23:23.476Z",
-      "onchain": null
+      "id": "DON_2025092202",
+      "type": "monetary",
+      "details": {
+        "donorName": "John Doe",
+        "amount": 1000,
+        "currency": "INR",
+        "purpose": "Flood Relief",
+        "paymentMethod": "direct"
+      },
+      "tracking": {
+        "status": "pending",
+        "createdBy": "admin",
+        "createdAt": "2025-09-22T09:23:23.476Z",
+        "verificationId": "0x79b91a7820a58ac199e4d07d3063381da5b9df7e6d1b806ffd65270050bb58c9"
+      },
+      "blockchain": null
+    },
+    {
+      "id": "DON_2025092257",
+      "type": "monetary",
+      "details": {
+        "donorName": "John Doe",
+        "amount": 1000,
+        "currency": "INR",
+        "purpose": "Flood Relief",
+        "paymentMethod": "direct"
+      },
+      "tracking": {
+        "status": "pending",
+        "createdBy": "admin",
+        "createdAt": "2025-09-22T10:12:20.934Z",
+        "verificationId": "0x991524d6ac9609851904eb4335d183a9c5c571007b819b699ccf393b2b55ba64"
+      },
+      "blockchain": null
     }
   ],
   "supplies": [
     {
-      "trackingId": "s456",
-      "item": "Food Supplies",
-      "quantity": 100,
-      "from": "Delhi Warehouse",
-      "to": "Mumbai Relief Center",
-      "location": {
-        "lat": 19.076,
-        "lng": 72.8777
+      "id": "SUP_2025092201",
+      "type": "food",
+      "details": {
+        "item": "Food Supplies",
+        "quantity": 100,
+        "unit": "packages",
+        "category": "essential"
       },
-      "createdBy": "admin",
-      "ts": "2025-09-22T11:00:00Z",
-      "onchain": {
+      "logistics": {
+        "from": {
+          "name": "Delhi Warehouse",
+          "type": "warehouse"
+        },
+        "to": {
+          "name": "Mumbai Relief Center",
+          "type": "relief_center"
+        },
+        "location": {
+          "lat": 19.076,
+          "lng": 72.8777,
+          "locationName": "Mumbai"
+        }
+      },
+      "tracking": {
+        "status": "in_transit",
+        "trackingId": "s456",
+        "createdBy": "admin",
+        "createdAt": "2025-09-22T11:00:00Z"
+      },
+      "blockchain": {
         "txHash": "0x456",
-        "trackingId": "s456"
+        "trackingId": "s456",
+        "network": "mumbai",
+        "status": "confirmed"
       }
     }
-  ]
+  ],
+  "statistics": {
+    "totalDonations": 3000,
+    "totalSupplies": 1,
+    "lastDonationDate": "2025-09-22T10:12:20.939Z",
+    "lastSupplyDate": "2025-09-22T11:00:00Z"
+  }
 }
