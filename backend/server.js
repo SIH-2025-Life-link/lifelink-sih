@@ -15,9 +15,16 @@ const fs = require("fs-extra");
 const path = require("path");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(bodyParser.json());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
 
 // ------------ Config (from .env) ------------
 const PORT = process.env.PORT || 5000;
@@ -45,19 +52,24 @@ async function saveUsers(data) { return fs.writeJson(usersFile, data, { spaces: 
 let provider, wallet, contract;
 
 if (PROVIDER_URL && WALLET_PRIVATE_KEY && CONTRACT_ADDRESS) {
-  provider = new ethers.providers.JsonRpcProvider(PROVIDER_URL);
-  wallet = new ethers.Wallet(WALLET_PRIVATE_KEY, provider);
+  try {
+    provider = new ethers.JsonRpcProvider(PROVIDER_URL);
+    wallet = new ethers.Wallet(WALLET_PRIVATE_KEY, provider);
 
-  const abi = [
-    "event DonationRecorded(address indexed sender, string donorName, uint256 amount, string purpose, bytes32 txId, uint256 timestamp)",
-    "event DispatchRecorded(address indexed sender, string item, uint256 qty, string fromLoc, string toLoc, bytes32 trackingId, uint256 timestamp)",
-    "function recordDonation(string donorName, uint256 amount, string purpose, bytes32 txId) external",
-    "function recordDispatch(string item, uint256 qty, string fromLoc, string toLoc, bytes32 trackingId) external",
-    "function isRecorded(bytes32 id) external view returns (bool)"
-  ];
+    const abi = [
+      "event DonationRecorded(address indexed sender, string donorName, uint256 amount, string purpose, bytes32 txId, uint256 timestamp)",
+      "event DispatchRecorded(address indexed sender, string item, uint256 qty, string fromLoc, string toLoc, bytes32 trackingId, uint256 timestamp)",
+      "function recordDonation(string donorName, uint256 amount, string purpose, bytes32 txId) external",
+      "function recordDispatch(string item, uint256 qty, string fromLoc, string toLoc, bytes32 trackingId) external",
+      "function isRecorded(bytes32 id) external view returns (bool)"
+    ];
 
-  contract = new ethers.Contract(CONTRACT_ADDRESS, abi, wallet);
-  console.log("Ethers contract initialized:", CONTRACT_ADDRESS);
+    contract = new ethers.Contract(CONTRACT_ADDRESS, abi, wallet);
+    console.log("Ethers contract initialized:", CONTRACT_ADDRESS);
+  } catch (err) {
+    console.error("Error initializing ethers:", err);
+    contract = null;
+  }
 } else {
   console.warn("Ethers not fully configured. On-chain calls will be mocked.");
 }
@@ -71,8 +83,11 @@ function generatePseudoMac() {
 
 function generateTrackingId(payload) {
   const rnd = crypto.randomBytes(8).toString("hex");
-  const hash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(JSON.stringify(payload) + rnd + Date.now()));
-  return hash;
+  const dataString = JSON.stringify(payload) + rnd + Date.now();
+  const encoder = new TextEncoder();
+  const data = encoder.encode(dataString);
+  const hash = crypto.createHash('sha256').update(data).digest('hex');
+  return "0x" + hash;
 }
 
 async function appendLedger(type, record) {
@@ -144,7 +159,7 @@ app.post("/donate", authMiddleware, requireRole("ngo", "admin"), async (req, res
 
     let onchain = null;
     if (contract) {
-      const tx = await contract.recordDonation(donorName, ethers.BigNumber.from(String(amount)), purpose, txId);
+      const tx = await contract.recordDonation(donorName, ethers.parseUnits(String(amount), 'ether'), purpose, txId);
       onchain = { txHash: tx.hash, txId };
     }
 
@@ -156,7 +171,8 @@ app.post("/donate", authMiddleware, requireRole("ngo", "admin"), async (req, res
 
     return res.json({ message: "donation recorded", record, verifyUrl, qrDataUrl });
   } catch (err) {
-    return res.status(500).json({ message: "server error" });
+    console.error('Donation error:', err);
+    return res.status(500).json({ message: "server error", error: err.message });
   }
 });
 
