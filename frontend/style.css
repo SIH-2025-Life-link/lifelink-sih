@@ -274,6 +274,17 @@ figcaption {
   margin-bottom: 16px;
 }
 
+/* Override for real team photos: enforce 4:5 portrait and full-width inside card */
+.team-card .team-photo {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 12px; /* not circular */
+  display: block;
+  margin: 0 auto 16px auto;
+}
+
 .team-card:hover {
   transform: translateY(-5px);
 }

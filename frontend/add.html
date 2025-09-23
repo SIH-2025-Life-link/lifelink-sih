@@ -44,6 +44,25 @@
       <div class="status-message success" id="successMessage">
         Relief details submitted successfully!
       </div>
+
+      <!-- Tracking Credentials (shown after successful submit) -->
+      <div id="credsCard" class="creds-card" style="display:none;" aria-live="polite">
+        <div class="creds-header">Track Your Relief</div>
+        <p class="creds-sub">Use these credentials on the Check Relief page to view live updates.</p>
+        <div class="creds-grid">
+          <div class="creds-item">
+            <span class="label">ID</span>
+            <code class="value" id="trackIdValue">admin</code>
+            <button type="button" class="copy-btn" data-copy-target="#trackIdValue">Copy</button>
+          </div>
+          <div class="creds-item">
+            <span class="label">Password</span>
+            <code class="value" id="trackPwValue">admin123</code>
+            <button type="button" class="copy-btn" data-copy-target="#trackPwValue">Copy</button>
+          </div>
+        </div>
+        <a class="creds-link" href="check.html">Go to Check Relief →</a>
+      </div>
       
       <div class="status-message error" id="errorMessage">
         Error submitting relief details. Please try again.

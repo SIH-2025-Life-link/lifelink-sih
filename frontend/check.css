@@ -18,14 +18,25 @@
 }
 
 .card {
-    background: white;
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    margin: 1rem auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px; /* default for smaller cards like login */
+  margin: 1rem auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Wider layout for Verify and Audit panels */
+#verifyPanel.card,
+#auditPanel.card {
+  max-width: 1080px;
+}
+
+@media (min-width: 1280px) {
+  #verifyPanel.card,
+  #auditPanel.card { max-width: 1180px; }
 }
 
 .card:hover {
@@ -92,15 +103,15 @@ input:focus {
 }
 
 /* Result Box Styles */
-.result-box {
+#verifyResult.result-box {
     margin-top: 1.5rem;
     padding: 1rem;
     border-radius: 8px;
     background: #f8f9fc;
     border: 1px solid #e0e0e0;
     min-height: 100px;
-    max-height: 300px;
-    overflow-y: auto;
+    max-height: none; /* allow map to be fully visible */
+    overflow: visible;
 }
 
 .result-box:empty {
@@ -130,6 +141,79 @@ input:focus {
     text-decoration: underline;
 }
 
+/* Verify Summary (customer-focused) */
+.verify-summary {
+    display: grid;
+    grid-template-columns: 1.5fr 300px; /* more space overall; larger QR column */
+    gap: 1rem 1.25rem;
+    align-items: start;
+}
+
+.verify-summary .vs-left { display: flex; flex-direction: column; gap: 0.6rem; }
+.verify-summary .vs-right { display: flex; align-items: flex-start; justify-content: center; }
+
+.vs-header { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.vs-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.95rem;
+    color: #111827;
+    background: #eef2ff;
+    border: 1px solid #dbeafe;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.vs-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 999px;
+    background: #e5e7eb;
+    color: #374151;
+    font-weight: 600;
+}
+.vs-badge.success { background: #dcfce7; color: #166534; }
+.vs-badge.info { background: #dbeafe; color: #1e40af; }
+
+.vs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.vs-list li { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; background: #fff; padding: 0.5rem 0.65rem; border-radius: 8px; border: 1px solid #eef2f7; }
+.vs-list li span { color: #6b7280; font-size: 0.9rem; }
+.vs-list li strong { color: #1f2937; font-weight: 700; font-size: 0.95rem; }
+.vs-list li .status { color: #0e7c41; }
+
+@media (max-width: 900px) {
+    .verify-summary { grid-template-columns: 1fr; }
+    .verify-summary .vs-right { justify-content: flex-start; }
+    .verify-summary .qr-code-container img { width: 160px; height: 160px; }
+    .verify-map { height: 220px; }
+}
+
+/* Map container in verify summary */
+.verify-map {
+    width: 100%;
+    height: 260px;
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+/* Compact QR card on the right */
+.verify-summary .qr-code-container {
+    padding: 0.5rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.verify-summary .qr-code-container img {
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+.verify-summary .qr-code-label { margin-top: 0.35rem; }
+.verify-summary .qr-code-label p { margin: 0; font-size: 0.85rem; color: #6b7280; }
+.verify-summary .qr-code-label a { margin-top: 0.25rem; display: inline-block; }
+
 /* Messages */
 [role="alert"] {
     margin-top: 1rem;
@@ -148,6 +232,95 @@ input:focus {
     font-family: monospace;
     font-size: 0.9rem;
     line-height: 1.4;
+}
+
+/* Audit Trail: ID-only list */
+.audit-id-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.audit-id-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.audit-id-item .id-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.audit-id-item .id-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.audit-id-item .id-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1.05rem;
+  color: #111827;
+  word-break: break-all;
+}
+
+.audit-id-item .id-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.audit-id-item .copy-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
+}
+
+.audit-id-item .copy-btn:hover { background: #e5e7eb; }
+.audit-id-item .copy-btn:active { transform: translateY(1px); }
+
+.audit-id-item .verify-link {
+  color: #004aad;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.audit-id-item .qr-right {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #374151;
+  gap: 0.5rem;
+}
+
+.audit-id-item .qr-right canvas {
+  background: #fff;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.audit-id-item .qr-right span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .audit-id-item { grid-template-columns: 1fr; }
 }
 
 /* Animations */

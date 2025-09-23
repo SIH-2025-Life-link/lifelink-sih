@@ -96,6 +96,9 @@ function updateCompletionCircle(percentage) {
         ? circlePath.getTotalLength()
         : 100; // fallback
 
+    // Safety: ensure no fill is applied that could render as a solid patch
+    circlePath.style.fill = 'none';
+
     circlePath.style.strokeDasharray = `${length} ${length}`;
     circlePath.style.strokeDashoffset = length - (percentage / 100) * length;
 }
@@ -154,6 +157,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         });
     });
+
+    // Copy-to-clipboard (event delegation)
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-copy-id]');
+        if (btn) {
+            const value = btn.getAttribute('data-copy-id');
+            navigator.clipboard.writeText(value).then(() => {
+                btn.textContent = 'Copied';
+                setTimeout(() => (btn.textContent = 'Copy'), 1200);
+            });
+        }
+    });
 });
 
 async function loadStatistics() {
@@ -200,42 +215,41 @@ async function loadAuditTrail(type) {
     }
 }
 
+function makeVerifyUrl(id) {
+    return `http://localhost:5000/verifyRecord/${encodeURIComponent(id)}`;
+}
+
+function makeQrSrc(url) {
+    const encoded = encodeURIComponent(url);
+    return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encoded}`;
+}
+
 function renderDonations(donations, container) {
     if (!donations || donations.length === 0) {
         container.innerHTML = '<p>No donations found</p>';
         return;
     }
 
-    const content = donations.map(donation => `
-        <div class="audit-item ${donation.tracking.status}" 
-             data-date="${donation.tracking.createdAt}">
-            <div class="audit-bullet">
-                ${getStatusIcon(donation.tracking.status)}
-            </div>
-            <div class="audit-content">
-                <div class="audit-header">
-                    <h3>${donation.details.donorName}</h3>
-                    <span class="status ${donation.tracking.status}">
-                        ${donation.tracking.status.toUpperCase()}
-                    </span>
-                </div>
-                <div class="audit-details">
-                    <p><strong>Amount:</strong> ${new Intl.NumberFormat('en-IN', { 
-                        style: 'currency', 
-                        currency: 'INR' 
-                    }).format(donation.details.amount)}</p>
-                    <p><strong>Purpose:</strong> ${donation.details.purpose}</p>
-                    <p><strong>Date:</strong> ${new Date(donation.tracking.createdAt).toLocaleDateString()}</p>
-                    ${donation.blockchain ? `
-                        <div class="blockchain-info">
-                            <p><strong>TX Hash:</strong> ${donation.blockchain.txHash}</p>
-                            <p><strong>Network:</strong> ${donation.blockchain.network}</p>
-                        </div>
-                    ` : ''}
+    const content = donations.map(donation => {
+        const id = donation.id || donation.details?.id || donation.blockchain?.txHash || '';
+        const verifyUrl = makeVerifyUrl(id);
+        const qr = makeQrSrc(verifyUrl);
+        return `
+        <div class="audit-item id-only ${donation.tracking.status}" data-date="${donation.tracking.createdAt}">
+            <div class="id-left">
+                <div class="id-label">Transaction ID</div>
+                <div class="id-value" title="${id}">${id}</div>
+                <div class="id-actions">
+                    <button class="copy-btn" data-copy-id="${id}" aria-label="Copy transaction ID">Copy</button>
+                    <a class="verify-link" href="${verifyUrl}" target="_blank" rel="noopener">Open</a>
                 </div>
             </div>
-        </div>
-    `).join('');
+            <a class="qr-right" href="${verifyUrl}" target="_blank" rel="noopener" aria-label="Scan QR or click to verify">
+                <img src="${qr}" alt="QR to verify ${id}">
+                <span>Scan to verify</span>
+            </a>
+        </div>`;
+    }).join('');
 
     container.innerHTML = content;
 }
@@ -259,35 +273,26 @@ function renderSupplies(supplies, container) {
         return;
     }
 
-    const content = supplies.map(supply => `
-        <div class="audit-item ${supply.tracking.status}"
-             data-date="${supply.tracking.createdAt}">
-            <div class="audit-bullet">
-                ${getStatusIcon(supply.tracking.status)}
-            </div>
-            <div class="audit-content">
-                <div class="audit-header">
-                    <h3>${supply.details.item}</h3>
-                    <span class="status ${supply.tracking.status}">
-                        ${supply.tracking.status.toUpperCase()}
-                    </span>
-                </div>
-                <div class="audit-details">
-                    <p><strong>Quantity:</strong> ${supply.details.quantity} ${supply.details.unit}</p>
-                    <p><strong>Category:</strong> ${supply.details.category}</p>
-                    <p><strong>From:</strong> ${supply.logistics.from.name}</p>
-                    <p><strong>To:</strong> ${supply.logistics.to.name}</p>
-                    <p><strong>Date:</strong> ${new Date(supply.tracking.createdAt).toLocaleDateString()}</p>
-                    ${supply.blockchain ? `
-                        <div class="blockchain-info">
-                            <p><strong>TX Hash:</strong> ${supply.blockchain.txHash}</p>
-                            <p><strong>Network:</strong> ${supply.blockchain.network}</p>
-                        </div>
-                    ` : ''}
+    const content = supplies.map(supply => {
+        const id = supply.id || supply.details?.id || supply.blockchain?.txHash || '';
+        const verifyUrl = makeVerifyUrl(id);
+        const qr = makeQrSrc(verifyUrl);
+        return `
+        <div class="audit-item id-only ${supply.tracking.status}" data-date="${supply.tracking.createdAt}">
+            <div class="id-left">
+                <div class="id-label">Transaction ID</div>
+                <div class="id-value" title="${id}">${id}</div>
+                <div class="id-actions">
+                    <button class="copy-btn" data-copy-id="${id}" aria-label="Copy transaction ID">Copy</button>
+                    <a class="verify-link" href="${verifyUrl}" target="_blank" rel="noopener">Open</a>
                 </div>
             </div>
-        </div>
-    `).join('');
+            <a class="qr-right" href="${verifyUrl}" target="_blank" rel="noopener" aria-label="Scan QR or click to verify">
+                <img src="${qr}" alt="QR to verify ${id}">
+                <span>Scan to verify</span>
+            </a>
+        </div>`;
+    }).join('');
 
     container.innerHTML = content;
 }
