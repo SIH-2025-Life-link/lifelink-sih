@@ -1,24 +1,47 @@
 /* ===================
-   Global Styles
+   Global Styles & Design Tokens
 =================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  /* Brand palette */
+  --brand: #004aad;
+  --brand-600: #003a88;
+  --brand-700: #00327a;
+  --accent: #4CAF50;
+  --accent-600: #388E3C;
+  --warning-50: #FFF7ED;
+  --warning-200: #FED7AA;
+  --warning-500: #F59E0B;
+
+  /* Neutrals */
+  --bg: #f8f9fc;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+
+  /* Effects */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-md: 0 10px 30px -5px rgba(0,0,0,0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --focus: 0 0 0 3px rgba(0,74,173,0.15);
 }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
   font-family: 'Lato', sans-serif;
-  background: #f8f9fc;
-  color: #333;
+  background: var(--bg);
+  color: var(--text);
   line-height: 1.6;
   scroll-behavior: smooth;
-  transition: background 0.4s ease;
+  transition: background 0.4s ease, color 0.2s ease;
 }
 
 h1, h2, h3, h4 {
   font-family: 'Montserrat', sans-serif;
-  color: #004aad;
+  color: var(--brand);
 }
 
 a {
@@ -38,11 +61,11 @@ ul {
   justify-content: space-between;
   align-items: center;
   padding: 16px 8%;
-  background: #fff;
+  background: var(--card);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .navbar .logo {
@@ -64,8 +87,8 @@ ul {
 
 .navbar a:hover,
 .navbar a.active {
-  color: #004aad;
-  border-bottom: 2px solid #004aad;
+  color: var(--brand);
+  border-bottom: 2px solid var(--brand);
 }
 
 /* ===================
@@ -116,18 +139,23 @@ ul {
 =================== */
 .btn {
   display: inline-block;
-  background: #004aad;
+  background: var(--brand);
   color: #fff;
   padding: 12px 22px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn:hover {
-  background: #00327a;
+  background: var(--brand-600);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,74,173,0.18);
 }
+
+.btn:active { transform: translateY(-1px); }
+.btn:focus { outline: none; box-shadow: var(--focus); }
 
 /* ===================
    Forms
@@ -146,8 +174,8 @@ ul {
 .relief-form input,
 .relief-form textarea {
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   font-family: 'Lato', sans-serif;
   font-size: 1rem;
   outline: none;
@@ -156,8 +184,8 @@ ul {
 
 .relief-form input:focus,
 .relief-form textarea:focus {
-  border-color: #004aad;
-  box-shadow: 0 0 0 3px rgba(0,74,173,0.15);
+  border-color: var(--brand);
+  box-shadow: var(--focus);
 }
 
 /* ===================
@@ -179,10 +207,10 @@ ul {
 }
 
 .card {
-  background: #fff;
+  background: var(--card);
   padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease;
 }
 
@@ -219,7 +247,7 @@ ul {
 figcaption {
   margin-top: 8px;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--muted);
 }
 
 /* ===================
@@ -242,10 +270,10 @@ figcaption {
 }
 
 .team-card {
-  background: #fff;
+  background: var(--card);
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.3s ease;
 }
 
@@ -530,4 +558,9 @@ footer {
   .verify-section .card {
    padding: 18px 8px 14px 8px;
   }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
 }

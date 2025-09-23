@@ -56,22 +56,32 @@ body {
 /* Hero Section */
 .hero.small-hero {
     background: linear-gradient(135deg, #002B3D 0%, #004aad 100%);
-    padding: 3rem 1rem;
+    padding: 3.5rem 1rem;
     text-align: center;
-    color: white;
-    margin-top: 71px;
+    color: #fff; /* ensure readable text */
+    margin-top: 86px; /* match navbar height */
+    position: relative;
+    min-height: 220px; /* provide visible area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2; /* keep above overlays if any */
 }
 
 .hero-content h1 {
-    font-size: 2.5rem;
-    margin: 0 0 1rem;
+    font-size: 2.6rem;
+    margin: 0 0 0.5rem;
     font-family: 'Montserrat', sans-serif;
+    color: #fff;
 }
+
+.hero.small-hero .tagline { color: #e5e7eb; }
 
 /* Form Section */
 .content-wrapper {
@@ -159,6 +169,25 @@ body {
     width: 100%;
     margin-top: 1rem;
 }
+
+.submit-btn:hover { background: #003a88; box-shadow: 0 6px 18px rgba(0,74,173,0.18); }
+.submit-btn:focus { outline: none; box-shadow: 0 0 0 3px rgba(0,74,173,.18); }
+
+/* Status messages */
+.status-message { display: none; border-radius: 10px; padding: .75rem 1rem; margin: .5rem 0 0.75rem; font-weight: 600; }
+.status-message.success { display: none; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+.status-message.error { display: none; background: #fef2f2; color: #7f1d1d; border: 1px solid #fecaca; }
+
+/* Validation feedback leveraging classes toggled by JS */
+.relief-form .is-valid { border-color: #10b981 !important; box-shadow: 0 0 0 3px rgba(16,185,129,.15); }
+.relief-form .is-invalid { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
+
+/* Small helper text style */
+.hint { color: #6b7280; font-size: .9rem; }
+
+/* Smooth fade + slide */
+.fade-up { opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+.fade-up.show { opacity: 1; transform: translateY(0); }
 
 /* Tracking Credentials Card */
 .creds-card {
