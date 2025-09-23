@@ -7,9 +7,8 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="navbar.css">
-  <link rel="stylesheet" href="new-styles.css">
+  <link rel="stylesheet" href="add.css">
 </head>
 <body class="fade-out">
   <!-- Navigation -->
@@ -28,11 +27,22 @@
     </nav>
   </header>
 
-  <!-- Hero -->
+  <!-- Enhanced Hero Section -->
   <section class="hero small-hero">
+    <div class="hero-bg-overlay"></div>
     <div class="hero-content">
-      <h1 class="fade-up">Add Relief</h1>
-      <p class="fade-up tagline">Submit relief resource details here.</p>
+      <div class="hero-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Heart shape -->
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          <!-- Plus sign -->
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+      </div>
+      <h1 class="hero-title fade-up">Add Relief</h1>
+      <p class="hero-subtitle fade-up tagline">Submit relief resource details here</p>
+      <div class="hero-divider"></div>
     </div>
   </section>
 
@@ -42,6 +52,14 @@
       <div class="form-header">
         <h2>Relief Submission Form</h2>
         <p>Help those in need by providing relief resources</p>
+      </div>
+      
+      <!-- Important Notice -->
+      <div class="important-notice">
+        <div class="important-notice-content">
+          <h3>Important Notice</h3>
+          <p>This form is for official relief submissions only. Please review all details carefully — once submitted, your entry cannot be cancelled.</p>
+        </div>
       </div>
       
       <div class="status-message success" id="successMessage">
@@ -69,6 +87,66 @@
       
       <div class="status-message error" id="errorMessage">
         Error submitting relief details. Please try again.
+      </div>
+      
+      <!-- ID Pass Section (initially hidden) -->
+      <div id="idPassSection" class="id-pass-container" style="display: none;">
+        <div class="id-pass-header">
+          <div class="id-pass-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="id-pass-title">Your Relief ID</h3>
+            <p class="id-pass-subtitle">Save these credentials to track your relief status</p>
+          </div>
+        </div>
+        
+        <div class="id-pass-grid">
+          <div class="id-pass-item">
+            <span class="id-pass-label">Relief ID</span>
+            <div class="id-pass-value" id="reliefIdDisplay">admin</div>
+            <button type="button" class="copy-btn" onclick="copyToClipboard('reliefIdDisplay')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy ID
+            </button>
+          </div>
+          
+          <div class="id-pass-item">
+            <span class="id-pass-label">Password</span>
+            <div class="id-pass-value" id="reliefPasswordDisplay">admin123</div>
+            <button type="button" class="copy-btn" onclick="copyToClipboard('reliefPasswordDisplay')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy Password
+            </button>
+          </div>
+        </div>
+        
+        <div class="id-pass-actions">
+          <a href="check.html" class="id-pass-link">
+            Track Relief Status
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <button type="button" class="print-btn" onclick="window.print()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Print
+          </button>
+        </div>
       </div>
 
       <form class="relief-form" id="reliefForm">
@@ -102,12 +180,6 @@
         <div class="form-group">
           <label for="details">Additional Details</label>
           <textarea id="details" name="details" rows="4" placeholder="Provide any relevant information about the relief resources..."></textarea>
-        </div>
-        <div class="form-warning" role="alert" aria-live="polite">
-          <span class="icon" aria-hidden="true">!</span>
-          <div>
-            <strong>Important:</strong> This form is for official relief submissions only. Please review all details carefully — once submitted, your entry cannot be cancelled.
-          </div>
         </div>
 
         <button type="submit" class="submit-btn">Submit Relief Details</button>
