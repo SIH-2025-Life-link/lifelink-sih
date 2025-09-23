@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="check.css">
   <link rel="stylesheet" href="navbar.css">
   <script src="qr.js" defer></script>
+  <!-- Leaflet Map (for live package tracking) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="icon" type="image/png" href="assets/lifelink-logo.png">
   <style>
     .qr-code-container {
@@ -82,7 +85,7 @@
       <div id="auditPanel" class="card" style="display:none;" aria-live="polite">
         <h3>Audit Trail <span title="Authorized Roles Only">🛡️</span></h3>
         <button class="btn" id="loadAuditBtn" type="button">Load Audit Trail</button>
-        <pre id="auditResult" class="result-box" tabindex="0"></pre>
+        <div id="auditResult" class="result-box" tabindex="0"></div>
       </div>
     </section>
   </main>
@@ -126,50 +129,192 @@
       }
     }
 
+    // Geocode a location name to coordinates using Nominatim
+    async function geocodeLocation(name) {
+      try {
+        const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(name)}`);
+        const arr = await resp.json();
+        if (Array.isArray(arr) && arr.length > 0) {
+          return { lat: parseFloat(arr[0].lat), lng: parseFloat(arr[0].lon) };
+        }
+      } catch (_) {}
+      return null;
+    }
+
+    function initLeafletMap(targetId, lat, lng, label, status) {
+      if (!window.L || !document.getElementById(targetId)) return;
+      const map = L.map(targetId).setView([lat, lng], 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup(`<strong>${label || 'Current Location'}</strong>${status ? `<br>Status: ${status}` : ''}`)
+        .openPopup();
+    }
+
+    function initEmptyMap(targetId) {
+      if (!window.L || !document.getElementById(targetId)) return;
+      const map = L.map(targetId).setView([20.5937, 78.9629], 4); // Center on India
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+    }
+
     async function verifyRecord(txHash) {
       const result = document.getElementById("verifyResult");
       result.textContent = "";
       try {
         const resp = await fetch(`${API_BASE}/verifyRecord/${encodeURIComponent(txHash)}`);
         const j = await resp.json();
-        if (resp.ok) {
-          let out = `<h4>✅ Record Found (${j.type ? j.type.toUpperCase() : "RECORD"})</h4>`;
-          for (const [key, value] of Object.entries(j.data || {})) {
-            out += `<p><strong>${key}:</strong> ${value}</p>`;
-          }
-          out += `<p><strong>Transaction Hash:</strong> ${txHash}</p>`;
-          
-          // Create QR code
-          const verificationUrl = `${API_BASE}/verifyRecord/${txHash}`;
-          const qrContainer = document.createElement('div');
-          qrContainer.className = 'qr-code-container';
-          
-          // Generate QR code
-          const qrCode = QR.generate(verificationUrl, 200);
-          qrContainer.appendChild(qrCode);
-          
-          // Add label
-          const label = document.createElement('div');
-          label.className = 'qr-code-label';
-          label.innerHTML = `
-            <p>Scan to verify on blockchain</p>
-            <a href="${verificationUrl}" target="_blank" rel="noopener">🔗 Open verification link</a>
-          `;
-          qrContainer.appendChild(label);
-          
-          result.innerHTML = out;
-          result.appendChild(qrContainer);
-        } else {
+        if (!resp.ok) {
           result.textContent = "❌ Error: " + (j.message || "Not found");
+          return;
         }
+
+        const type = (j.type || '').toLowerCase();
+        const data = j.data || {};
+        const verifyUrl = `${API_BASE}/verifyRecord/${txHash}`;
+
+        // Build summary content per type
+        let summaryHTML = '';
+        if (type === 'donation') {
+          const id = data.id || txHash;
+          const donor = data.details?.donorName || 'Anonymous';
+          const amount = new Intl.NumberFormat('en-IN', { style: 'currency', currency: data.details?.currency || 'INR' }).format(data.details?.amount || 0);
+          const purpose = data.details?.purpose || '-';
+          const status = (data.tracking?.status || '-').replace('_', ' ');
+          const when = data.tracking?.createdAt ? new Date(data.tracking.createdAt).toLocaleString() : '-';
+          const reached = data.tracking?.location?.locationName || data.tracking?.lastKnownLocation || '-';
+          const dLoc = data.tracking?.location;
+          const hasCoords = dLoc && typeof dLoc.lat === 'number' && typeof dLoc.lng === 'number';
+          const mapId = `verify-map-${Date.now()}`;
+
+          summaryHTML = `
+            <div class="verify-summary">
+              <div class="vs-left">
+                <div class="vs-header">
+                  <span class="vs-badge success">Donation</span>
+                  <span class="vs-id" title="${id}">${id}</span>
+                </div>
+                <ul class="vs-list">
+                  <li><span>Donor</span><strong>${donor}</strong></li>
+                  <li><span>Amount</span><strong>${amount}</strong></li>
+                  <li><span>Purpose</span><strong>${purpose}</strong></li>
+                  <li><span>Status</span><strong class="status">${status}</strong></li>
+                  <li><span>Date</span><strong>${when}</strong></li>
+                  <li><span>Reached</span><strong>${reached}</strong></li>
+                </ul>
+                <div class="verify-map" id="${mapId}" aria-label="Package Location Map"></div>
+              </div>
+              <div class="vs-right">
+                <div class="qr-code-container">
+                  <img src="${makeQrSrc(verifyUrl)}" alt="QR to verify ${id}" width="180" height="180" />
+                  <div class="qr-code-label">
+                    <p>Scan to verify on blockchain</p>
+                    <a href="${verifyUrl}" target="_blank" rel="noopener"> Open verification link</a>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+
+          // After injecting, initialize map (coords or geocode by name), otherwise empty map
+          setTimeout(async () => {
+            try {
+              if (document.getElementById(mapId)) {
+                if (hasCoords) {
+                  initLeafletMap(mapId, dLoc.lat, dLoc.lng, reached, status);
+                } else if (reached && reached !== '-') {
+                  const g = await geocodeLocation(reached);
+                  if (g) initLeafletMap(mapId, g.lat, g.lng, reached, status); else initEmptyMap(mapId);
+                }
+                else {
+                  initEmptyMap(mapId);
+                }
+              }
+            } catch (_) {}
+          }, 0);
+        } else if (type === 'supply' || type === 'supplies') {
+          const id = data.id || txHash;
+          const item = data.details?.item || '-';
+          const qty = data.details?.quantity != null ? `${data.details.quantity} ${data.details?.unit || ''}`.trim() : '-';
+          const from = data.logistics?.from?.name || '-';
+          const to = data.logistics?.to?.name || '-';
+          const where = data.logistics?.location?.locationName || '-';
+          const status = (data.tracking?.status || '-').replace('_', ' ');
+          const when = data.tracking?.createdAt ? new Date(data.tracking.createdAt).toLocaleString() : '-';
+          const loc = data.logistics?.location;
+          const hasCoords = loc && typeof loc.lat === 'number' && typeof loc.lng === 'number';
+          const mapId = `verify-map-${Date.now()}`;
+
+          summaryHTML = `
+            <div class="verify-summary">
+              <div class="vs-left">
+                <div class="vs-header">
+                  <span class="vs-badge info">Supply</span>
+                  <span class="vs-id" title="${id}">${id}</span>
+                </div>
+                <ul class="vs-list">
+                  <li><span>Item</span><strong>${item}</strong></li>
+                  <li><span>Quantity</span><strong>${qty}</strong></li>
+                  <li><span>From → To</span><strong>${from} → ${to}</strong></li>
+                  <li><span>Current Location</span><strong>${where}</strong></li>
+                  <li><span>Status</span><strong class="status">${status}</strong></li>
+                  <li><span>Updated</span><strong>${when}</strong></li>
+                </ul>
+                <div class="verify-map" id="${mapId}" aria-label="Package Location Map"></div>
+              </div>
+              <div class="vs-right">
+                <div class="qr-code-container">
+                  <img src="${makeQrSrc(verifyUrl)}" alt="QR to verify ${id}" width="180" height="180" />
+                  <div class="qr-code-label">
+                    <p>Scan to verify on blockchain</p>
+                    <a href="${verifyUrl}" target="_blank" rel="noopener"> Open verification link</a>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+
+          // Initialize map for supplies (coords or geocode by name), otherwise empty map
+          setTimeout(async () => {
+            try {
+              if (document.getElementById(mapId)) {
+                if (hasCoords) {
+                  initLeafletMap(mapId, loc.lat, loc.lng, where, status);
+                } else if (where && where !== '-') {
+                  const g = await geocodeLocation(where);
+                  if (g) initLeafletMap(mapId, g.lat, g.lng, where, status); else initEmptyMap(mapId);
+                }
+                else {
+                  initEmptyMap(mapId);
+                }
+              }
+            } catch (_) {}
+          }, 0);
+        } else {
+          // Fallback minimal view
+          summaryHTML = `<div class="verify-summary"><div class="vs-left"><div class="vs-header"><span class="vs-badge">Record</span><span class="vs-id">${txHash}</span></div></div></div>`;
+        }
+
+        result.innerHTML = `<h4>✅ Record Found (${(j.type || 'Record').toUpperCase()})</h4>` + summaryHTML;
       } catch (err) {
         result.textContent = "⚠️ Server error: " + err.message;
       }
     }
 
+    function makeVerifyUrl(id) {
+      return `${API_BASE}/verifyRecord/${encodeURIComponent(id)}`;
+    }
+
+    function makeQrSrc(url) {
+      const encoded = encodeURIComponent(url);
+      return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encoded}`;
+    }
+
     async function loadAuditTrail() {
       const result = document.getElementById("auditResult");
-      result.textContent = "";
+      result.innerHTML = "";
       if (!authToken) {
         alert("Login required to view audit trail");
         return;
@@ -179,12 +324,64 @@
           method: "GET",
           headers: { "Authorization": "Bearer " + authToken }
         });
-        const j = await resp.json();
-        if (resp.ok) {
-          result.textContent = JSON.stringify(j, null, 2);
-        } else {
-          result.textContent = "❌ Error: " + (j.message || "Not found");
+        const data = await resp.json();
+        if (!resp.ok) {
+          result.textContent = "❌ Error: " + (data.message || "Not found");
+          return;
         }
+
+        // Build donation ID-only list with QR
+        const wrapper = document.createElement('div');
+        wrapper.className = 'audit-id-list';
+
+        (data.donations || []).forEach(d => {
+          const id = d.id || d.tracking?.verificationId || d.blockchain?.txHash || '';
+          const item = document.createElement('div');
+          item.className = 'audit-id-item';
+
+          const left = document.createElement('div');
+          left.className = 'id-left';
+          left.innerHTML = `
+            <div class="id-label">Transaction ID</div>
+            <div class="id-value" title="${id}">${id}</div>
+            <div class="id-actions">
+              <button class="copy-btn" data-copy-id="${id}">Copy</button>
+              <a class="verify-link" href="${makeVerifyUrl(id)}" target="_blank" rel="noopener">Open</a>
+            </div>`;
+
+          const right = document.createElement('a');
+          right.className = 'qr-right';
+          right.href = makeVerifyUrl(id);
+          right.target = '_blank';
+          right.rel = 'noopener';
+          // Use same QR style as home (external image)
+          const qrImg = document.createElement('img');
+          qrImg.src = makeQrSrc(makeVerifyUrl(id));
+          qrImg.alt = `QR to verify ${id}`;
+          qrImg.width = 140;
+          qrImg.height = 140;
+          right.appendChild(qrImg);
+          const span = document.createElement('span');
+          span.textContent = 'Scan to verify';
+          right.appendChild(span);
+
+          item.appendChild(left);
+          item.appendChild(right);
+          wrapper.appendChild(item);
+        });
+
+        result.appendChild(wrapper);
+
+        // Copy behavior
+        result.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-copy-id]');
+          if (!btn) return;
+          const val = btn.getAttribute('data-copy-id');
+          navigator.clipboard.writeText(val).then(() => {
+            btn.textContent = 'Copied';
+            setTimeout(() => (btn.textContent = 'Copy'), 1200);
+          });
+        });
       } catch (err) {
         result.textContent = "⚠️ Server error: " + err.message;
       }

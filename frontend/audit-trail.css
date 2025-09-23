@@ -158,6 +158,83 @@
   font-size: 0.9rem;
 }
 
+/* Refresh controls under Live Statistics */
+.refresh-timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: #556;
+  font-size: 0.95rem;
+}
+
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #004aad;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background 0.25s ease, transform 0.05s ease, box-shadow 0.25s ease;
+}
+
+.refresh-btn:hover {
+  background: #003a88;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.refresh-btn:active {
+  transform: translateY(1px);
+}
+
+.refresh-btn .refresh-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.refresh-btn[disabled],
+.refresh-btn[aria-disabled="true"] {
+  background: #9db7e3;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Circular completion ring */
+.completion-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.circular-chart {
+  width: 80px;
+  height: 80px;
+  display: block;
+  background: transparent;
+}
+
+.circular-chart .circle-bg,
+.circular-chart .circle {
+  fill: none !important;
+}
+
+.circular-chart .circle-bg {
+  stroke: #e6e6e6;
+}
+
+.circular-chart .circle {
+  stroke: #4CAF50;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
 /* Audit Trail Section */
 .audit-trail {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
@@ -287,6 +364,95 @@
 
 .audit-content {
   flex-grow: 1;
+}
+
+/* ID-only presentation for audit items */
+.audit-item.id-only {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem 1.25rem;
+  padding: 1.25rem 1.25rem;
+}
+
+.audit-item.id-only .id-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.audit-item.id-only .id-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.audit-item.id-only .id-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1.05rem;
+  color: #111827;
+  word-break: break-all;
+}
+
+.audit-item.id-only .id-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.audit-item.id-only .copy-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
+}
+
+.audit-item.id-only .copy-btn:hover {
+  background: #e5e7eb;
+}
+
+.audit-item.id-only .copy-btn:active {
+  transform: translateY(1px);
+}
+
+.audit-item.id-only .verify-link {
+  color: #004aad;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.audit-item.id-only .qr-right {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #374151;
+  gap: 0.5rem;
+}
+
+.audit-item.id-only .qr-right img {
+  width: 140px;
+  height: 140px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.audit-item.id-only .qr-right span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .audit-item.id-only {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
 }
 
 .audit-item.completed {
