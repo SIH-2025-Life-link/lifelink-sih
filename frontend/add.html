@@ -4,21 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Relief – Disaster Relief Portal</title>
-  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="new-styles.css">
 </head>
 <body class="fade-out">
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">ReliefConnect</div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="add.html" class="active">Add Relief</a></li>
-      <li><a href="check.html">Check Relief</a></li>
-      <li><a href="about.html">About Us</a></li>
-    </ul>
-  </nav>
+  <!-- Navigation -->
+  <header class="navbar">
+    <nav>
+      <a href="index.html" class="logo">
+        <img src="assets/lifelink-logo.png" alt="LifeLink" class="nav-logo">
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="add.html" class="active">Add Relief</a></li>
+        <li><a href="check.html">Check Relief</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <!-- Hero -->
   <section class="hero small-hero">
@@ -29,25 +34,59 @@
   </section>
 
   <!-- Form Section -->
-  <main>
-    <section class="content fade-up" style="max-width: 420px; margin: 40px auto 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 32px 28px;">
-      <h2 style="font-family: 'Montserrat', sans-serif; color: #004aad; margin-bottom: 18px;">Relief Submission Form</h2>
-      <form class="relief-form">
-        <label for="reliefType">Relief Type:</label>
-        <input type="text" id="reliefType" name="reliefType" placeholder="Food, Shelter, Medical..." required>
+  <main class="content-wrapper">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Relief Submission Form</h2>
+        <p>Help those in need by providing relief resources</p>
+      </div>
+      
+      <div class="status-message success" id="successMessage">
+        Relief details submitted successfully!
+      </div>
+      
+      <div class="status-message error" id="errorMessage">
+        Error submitting relief details. Please try again.
+      </div>
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" placeholder="City / Region" required>
+      <form class="relief-form" id="reliefForm">
+        <div class="form-group">
+          <label for="reliefType">Relief Type</label>
+          <select id="reliefType" name="reliefType" required>
+            <option value="">Select relief type...</option>
+            <option value="Food">Food & Water</option>
+            <option value="Shelter">Shelter</option>
+            <option value="Medical">Medical Supplies</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
 
-        <label for="contact">Contact Info:</label>
-        <input type="text" id="contact" name="contact" placeholder="Phone or Email" required>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" placeholder="City / Region" required>
+        </div>
 
-        <label for="details">Additional Details:</label>
-        <textarea id="details" name="details" rows="4" placeholder="Any extra info..."></textarea>
+        <div class="form-group">
+          <label for="contact">Contact Information</label>
+          <input type="text" id="contact" name="contact" placeholder="Phone or Email" required>
+        </div>
 
-        <button type="submit" class="btn">Submit</button>
+        <div class="form-group">
+          <label for="quantity">Quantity/Capacity</label>
+          <input type="text" id="quantity" name="quantity" placeholder="E.g., 100 meals, 50 beds..." required>
+        </div>
+
+        <div class="form-group">
+          <label for="details">Additional Details</label>
+          <textarea id="details" name="details" rows="4" placeholder="Provide any relevant information about the relief resources..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Relief Details</button>
       </form>
-    </section>
+
+      <p class="form-note">All fields marked with * are required. Your contact information will only be shared with verified relief seekers.</p>
+    </div>
   </main>
 
   <footer>
@@ -64,5 +103,6 @@
     });
   </script>
   <script src="script.js"></script>
+  <script src="add.js"></script>
 </body>
 </html>
