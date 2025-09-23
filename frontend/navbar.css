@@ -1,3 +1,4 @@
+/* Main navbar container */
 .navbar {
     background: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
@@ -9,16 +10,18 @@
     height: 86px;
     display: flex;
     align-items: center;
+    padding: 0 2rem;
 }
 
+/* Navigation container */
 .navbar nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 100%; /* allow full-width so logo can sit at far left */
-    margin: 0;       /* no centering margin */
-    padding: 0 2rem 0 0.75rem; /* tighter left padding to push logo left */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
     height: 100%;
 }
 
@@ -110,15 +113,26 @@
     transform: translateY(-2px);
 }
 
+@media (max-width: 992px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+    
+    .navbar nav {
+        padding: 0;
+    }
+}
+
 @media (max-width: 768px) {
     .navbar {
         height: auto;
         min-height: 64px;
+        padding: 0.5rem 1rem;
     }
     
     .navbar nav {
         flex-direction: column;
-        padding: 0.75rem 1rem;
+        padding: 0.5rem 0;
         height: auto;
         gap: 0.5rem;
     }
@@ -128,10 +142,12 @@
         gap: 0.75rem;
         text-align: center;
         width: 100%;
+        padding: 0.5rem 0;
     }
 
     .logo {
         justify-content: center;
+        padding: 0.5rem 0;
     }
 
     .nav-logo {
@@ -140,13 +156,15 @@
 
     .navbar a {
         font-size: 0.95rem;
-        padding: 0.4rem 0;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        justify-content: center;
     }
 }
 
 @media (max-width: 480px) {
-    .navbar nav {
-        padding: 0.5rem 0.75rem;
+    .navbar {
+        padding: 0.25rem 0.75rem;
     }
 
     .nav-logo {
@@ -154,10 +172,17 @@
     }
 
     .navbar ul {
-        gap: 0.5rem;
+        gap: 0.25rem;
     }
 
     .navbar a {
         font-size: 0.9rem;
+        padding: 0.4rem 0.5rem;
+    }
+    
+    .navbar a.highlight {
+        margin-top: 0.5rem;
+        width: auto;
+        display: inline-block;
     }
 }
