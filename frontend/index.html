@@ -6,16 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="audit-trail.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body class="fade-out">
   <!-- Navigation -->
   <header class="navbar">
     <nav>
+      <a href="index.html" class="logo">
+        <img src="assets/lifelink-logo.png" alt="LifeLink" class="nav-logo">
+      </a>
       <ul>
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="about.html">About Us</a></li>
         <li><a href="add.html">Add Relief</a></li>
         <li><a href="check.html">Check Relief</a></li>
+        <li><a href="#audit-trail" class="highlight">Audit Trail</a></li>
       </ul>
     </nav>
   </header>
@@ -68,6 +75,142 @@
     </div>
   </section>
 
+  <!-- Live Statistics Section -->
+  <section id="statistics" class="statistics fade-up">
+    <h2>Live Statistics</h2>
+    <div class="stat-cards">
+      <div class="stat-card" data-aos="fade-up">
+        <div class="stat-icon">
+          <div class="icon-circle donation">💰</div>
+        </div>
+        <h3>Total Donations</h3>
+        <p class="stat-number" id="totalDonations">3,000 INR</p>
+        <p class="stat-text">Across <span id="transactionCount">3</span> transactions</p>
+        <div class="progress-bar">
+          <div class="progress" style="width: 75%"></div>
+        </div>
+      </div>
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-icon">
+          <div class="icon-circle supply">📦</div>
+        </div>
+        <h3>Active Supplies</h3>
+        <p class="stat-number" id="activeSupplies">100</p>
+        <p class="stat-text">Packages in transit</p>
+        <div class="supply-chart">
+          <div class="chart-bar" style="height: 60%"></div>
+          <div class="chart-bar" style="height: 80%"></div>
+          <div class="chart-bar" style="height: 40%"></div>
+          <div class="chart-bar" style="height: 90%"></div>
+        </div>
+      </div>
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-icon">
+          <div class="icon-circle completed">✅</div>
+        </div>
+        <h3>Completed</h3>
+        <p class="stat-number" id="CompletedDonations">1</p>
+        <p class="stat-text">Verified Transactions</p>
+        <div class="completion-ring">
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle-bg"/>
+            <path d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle" id="completionCircle"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="refresh-timer">
+      <span>Next Update In:- </span>
+      <span id="refreshCounter">30</span>
+      <span> seconds</span>
+      <button id="refreshNow" class="refresh-btn">
+        <svg class="refresh-icon" viewBox="0 0 24 24">
+          <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        Refresh Now
+      </button>
+    </div>
+  </section>
+
+  <!-- Audit Trail Section -->
+  <section id="audit-trail" class="audit-trail fade-up">
+    <div class="section-header">
+      <h2>Recent Transactions</h2>
+      <div class="filter-controls">
+        <div class="search-box">
+          <input type="text" id="searchAudit" placeholder="Search transactions...">
+          <svg class="search-icon" viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </div>
+        <div class="date-filter">
+          <select id="dateFilter">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="audit-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="donations" role="tab" aria-selected="true">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+        </svg>
+        Donations
+        <span class="tab-count" id="donationsCount">3</span>
+      </button>
+      <button class="tab-btn" data-tab="supplies" role="tab" aria-selected="false">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+        </svg>
+        Supplies
+        <span class="tab-count" id="suppliesCount">1</span>
+      </button>
+    </div>
+    
+    <div class="audit-content" id="auditContent">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <span>Loading transactions...</span>
+      </div>
+    </div>
+
+    <div class="audit-summary">
+      <div class="audit-legend">
+        <div class="legend-item">
+          <span class="status-dot completed"></span>
+          <span class="legend-label">Completed</span>
+          <span class="legend-count" id="completedCount">1</span>
+        </div>
+        <div class="legend-item">
+          <span class="status-dot pending"></span>
+          <span class="legend-label">Pending</span>
+          <span class="legend-count" id="pendingCount">2</span>
+        </div>
+        <div class="legend-item">
+          <span class="status-dot in-transit"></span>
+          <span class="legend-label">In Transit</span>
+          <span class="legend-count" id="transitCount">1</span>
+        </div>
+      </div>
+      <div class="blockchain-status">
+        <svg class="blockchain-icon" viewBox="0 0 24 24">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 20.99V12H3.06C3.56 16.27 6.31 19.68 12 21.99z"/>
+        </svg>
+        <span>Blockchain Verified</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="fade-up">
     <p>© 2025 LifeLink. All rights reserved.</p>
@@ -84,5 +227,6 @@
     });
   </script>
   <script src="script.js"></script>
+  <script src="audit-trail.js"></script>
 </body>
 </html>

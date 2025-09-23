@@ -6,11 +6,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="check.css">
+  <link rel="stylesheet" href="navbar.css">
+  <script src="qr.js" defer></script>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <style>
+    .qr-code-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .qr-code-container canvas {
+      border: 8px solid white;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .qr-code-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
 </head>
 <body class="fade-out">
   <!-- Navigation -->
   <header class="navbar" role="banner">
-    <nav aria-label="Main navigation"></nav>
+    <nav aria-label="Main navigation">
+      <a href="index.html" class="logo">
+        <img src="assets/lifelink-logo.png" alt="LifeLink" class="nav-logo">
+      </a>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
@@ -21,7 +51,7 @@
   </header>
 
   <main>
-    <section class="verify-section fade-up" aria-labelledby="verify-heading"></section>
+    <section class="verify-section fade-up" aria-labelledby="verify-heading">
       <h2 id="verify-heading">Relief Verification &amp; Audit</h2>
 
       <!-- Login Panel -->
@@ -108,8 +138,27 @@
             out += `<p><strong>${key}:</strong> ${value}</p>`;
           }
           out += `<p><strong>Transaction Hash:</strong> ${txHash}</p>`;
-          out += `<p><a href="${API_BASE}/verifyRecord/${txHash}" target="_blank" rel="noopener">🔗 Verify on Blockchain</a></p>`;
+          
+          // Create QR code
+          const verificationUrl = `${API_BASE}/verifyRecord/${txHash}`;
+          const qrContainer = document.createElement('div');
+          qrContainer.className = 'qr-code-container';
+          
+          // Generate QR code
+          const qrCode = QR.generate(verificationUrl, 200);
+          qrContainer.appendChild(qrCode);
+          
+          // Add label
+          const label = document.createElement('div');
+          label.className = 'qr-code-label';
+          label.innerHTML = `
+            <p>Scan to verify on blockchain</p>
+            <a href="${verificationUrl}" target="_blank" rel="noopener">🔗 Open verification link</a>
+          `;
+          qrContainer.appendChild(label);
+          
           result.innerHTML = out;
+          result.appendChild(qrContainer);
         } else {
           result.textContent = "❌ Error: " + (j.message || "Not found");
         }
