@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="audit-trail.css">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="new-statistics.css">
   <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body class="fade-out">
@@ -79,57 +80,68 @@
   <section id="statistics" class="statistics fade-up">
     <h2>Live Statistics</h2>
     <div class="stat-cards">
-      <div class="stat-card" data-aos="fade-up">
+      <div class="stat-card">
         <div class="stat-icon">
-          <div class="icon-circle donation">💰</div>
+          <div class="icon-circle donation">₹</div>
         </div>
         <h3>Total Donations</h3>
-        <p class="stat-number" id="totalDonations">3,000 INR</p>
-        <p class="stat-text">Across <span id="transactionCount">3</span> transactions</p>
-        <div class="progress-bar">
-          <div class="progress" style="width: 75%"></div>
+        <div class="stat-number donation-total">0</div>
+        <p class="stat-text">Across <span class="transaction-count">3</span> transactions</p>
+        <div id="donation-progress" class="progress-bar">
+          <div class="progress"></div>
         </div>
       </div>
-      <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+      
+      <div class="stat-card">
         <div class="stat-icon">
           <div class="icon-circle supply">📦</div>
         </div>
         <h3>Active Supplies</h3>
-        <p class="stat-number" id="activeSupplies">100</p>
+        <div class="stat-number supplies-total">0</div>
         <p class="stat-text">Packages in transit</p>
+        <div id="supplies-progress" class="progress-bar">
+          <div class="progress"></div>
+        </div>
         <div class="supply-chart">
-          <div class="chart-bar" style="height: 60%"></div>
-          <div class="chart-bar" style="height: 80%"></div>
-          <div class="chart-bar" style="height: 40%"></div>
-          <div class="chart-bar" style="height: 90%"></div>
+          <div class="chart-legend">
+            <span class="status-dot completed"></span>
+            <span class="legend-label">Delivered</span>
+            <span class="legend-count">150</span>
+          </div>
+          <div class="chart-legend">
+            <span class="status-dot in-transit"></span>
+            <span class="legend-label">In Transit</span>
+            <span class="legend-count">200</span>
+          </div>
+          <div class="chart-legend">
+            <span class="status-dot pending"></span>
+            <span class="legend-label">Pending</span>
+            <span class="legend-count">100</span>
+          </div>
         </div>
       </div>
-      <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+
+      <div class="stat-card">
         <div class="stat-icon">
           <div class="icon-circle completed">✅</div>
         </div>
-        <h3>Completed</h3>
-        <p class="stat-number" id="CompletedDonations">1</p>
-        <p class="stat-text">Verified Transactions</p>
+        <h3>Completion Rate</h3>
         <div class="completion-ring">
-          <svg viewBox="0 0 36 36" class="circular-chart">
-            <path d="M18 2.0845
-              a 15.9155 15.9155 0 0 1 0 31.831
-              a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle-bg"/>
-            <path d="M18 2.0845
-              a 15.9155 15.9155 0 0 1 0 31.831
-              a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle" id="completionCircle"/>
+          <svg id="completion-chart" class="circular-chart">
+            <circle class="circle-bg" cx="60" cy="60" r="54"/>
+            <circle class="circle" cx="60" cy="60" r="54"/>
           </svg>
+          <span class="completion-percent">85%</span>
         </div>
+        <p class="stat-text">Of total transactions</p>
       </div>
     </div>
+
     <div class="refresh-timer">
-      <span>Next Update In:- </span>
-      <span id="refreshCounter">30</span>
+      <span>Next update in </span>
+      <span class="refresh-countdown">60</span>
       <span> seconds</span>
-      <button id="refreshNow" class="refresh-btn">
+      <button class="refresh-btn">
         <svg class="refresh-icon" viewBox="0 0 24 24">
           <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
         </svg>
@@ -228,5 +240,7 @@
   </script>
   <script src="script.js"></script>
   <script src="audit-trail.js"></script>
+  <script src="canvas-bg.js"></script>
+  <script src="new-statistics.js"></script>
 </body>
 </html>
