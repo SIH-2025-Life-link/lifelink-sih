@@ -305,6 +305,71 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ===================
+   Inline SVG icon sizing (safety)
+=================== */
+/* Generic defaults for icons used in stats and audit trail */
+.statistics svg,
+.audit-trail svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.search-icon { width: 20px; height: 20px; display: inline-block; }
+.tab-icon { width: 20px; height: 20px; display: inline-block; }
+.refresh-icon { width: 18px; height: 18px; display: inline-block; transition: transform 0.3s ease; }
+
+
+/* ===================
+   Responsive
+=================== */
+@media (max-width: 768px) {
+  /* Typography */
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.2rem; }
+
+  /* Hero */
+  .hero { height: 56vh; padding: 0 16px; }
+  .hero.small-hero { height: 32vh; }
+  .hero .tagline { font-size: 1rem; }
+
+  /* Sections */
+  .values { padding: 40px 6%; }
+  .showcase { padding: 40px 6%; }
+
+  /* Grids */
+  .cards { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .showcase .images { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+
+  /* Forms */
+  .relief-form { gap: 12px; }
+
+  /* Footer */
+  footer { margin-top: 24px; padding: 18px; }
+}
+
+@media (max-width: 480px) {
+  /* Typography */
+  h1 { font-size: 1.9rem; }
+  h2 { font-size: 1.4rem; }
+
+  /* Hero */
+  .hero { height: 48vh; }
+  .hero .tagline { font-size: 0.95rem; }
+
+  /* Sections */
+  .values { padding: 28px 4%; }
+  .showcase { padding: 28px 4%; }
+
+  /* Grids */
+  .cards { grid-template-columns: 1fr; }
+  .showcase .images { grid-template-columns: 1fr; }
+
+  /* Footer */
+  footer { padding: 16px; }
+}
 /* ===================
   Relief Verification & Audit Page
 =================== */

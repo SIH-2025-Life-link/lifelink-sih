@@ -6,7 +6,7 @@
   <title>Add Relief – Disaster Relief Portal</title>
   <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
   <link rel="stylesheet" href="new-styles.css">
 </head>
 <body class="fade-out">
@@ -14,7 +14,7 @@
   <header class="navbar">
     <nav>
       <a href="index.html" class="logo">
-        <img src="assets/lifelink-logo.png" alt="LifeLink" class="nav-logo">
+        <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -80,6 +80,12 @@
         <div class="form-group">
           <label for="details">Additional Details</label>
           <textarea id="details" name="details" rows="4" placeholder="Provide any relevant information about the relief resources..."></textarea>
+        </div>
+        <div class="form-warning" role="alert" aria-live="polite">
+          <span class="icon" aria-hidden="true">!</span>
+          <div>
+            <strong>Important:</strong> This form is for official relief submissions only. Please review all details carefully — once submitted, your entry cannot be cancelled.
+          </div>
         </div>
 
         <button type="submit" class="submit-btn">Submit Relief Details</button>

@@ -21,7 +21,7 @@
 }
 
 .nav-logo {
-  height: 32px;
+  height: 56px;
   width: auto;
 }
 
@@ -335,6 +335,26 @@
 .status-dot.completed { background: #4CAF50; }
 .status-dot.pending { background: #FFC107; }
 .status-dot.in-transit { background: #2196F3; }
+
+/* Blockchain Status */
+.blockchain-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  color: #2a2a2a;
+}
+
+.blockchain-status .blockchain-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: inline-block;
+}
+
+.blockchain-status .blockchain-icon path {
+  fill: #4CAF50;
+}
 
 /* Loading Spinner */
 .loading-spinner {

@@ -86,14 +86,18 @@ function checkDateRange(date, range) {
     }
 }
 
-// Update completion circle animation
+// Update completion circle animation (supports path-based ring)
 function updateCompletionCircle(percentage) {
-    const circle = document.querySelector('.circle');
-    const radius = circle.r.baseVal.value;
-    const circumference = radius * 2 * Math.PI;
-    
-    circle.style.strokeDasharray = `${circumference} ${circumference}`;
-    circle.style.strokeDashoffset = circumference - (percentage / 100) * circumference;
+    const circlePath = document.getElementById('completionCircle');
+    if (!circlePath) return;
+
+    // Use total path length for dash calculations
+    const length = typeof circlePath.getTotalLength === 'function'
+        ? circlePath.getTotalLength()
+        : 100; // fallback
+
+    circlePath.style.strokeDasharray = `${length} ${length}`;
+    circlePath.style.strokeDashoffset = length - (percentage / 100) * length;
 }
 
 // Format currency with animation
