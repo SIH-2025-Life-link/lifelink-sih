@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="audit-trail.css">
   <link rel="stylesheet" href="navbar.css">
-  <link rel="stylesheet" href="new-statistics.css">
   <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body class="fade-out">
@@ -16,7 +15,7 @@
   <header class="navbar">
     <nav>
       <a href="index.html" class="logo">
-        <img src="assets/lifelink-logo.png" alt="LifeLink" class="nav-logo">
+        <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
         <li><a href="index.html" class="active">Home</a></li>
@@ -127,9 +126,15 @@
         </div>
         <h3>Completion Rate</h3>
         <div class="completion-ring">
-          <svg id="completion-chart" class="circular-chart">
-            <circle class="circle-bg" cx="60" cy="60" r="54"/>
-            <circle class="circle" cx="60" cy="60" r="54"/>
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle-bg"/>
+            <path d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+              class="circle" id="completionCircle"/>
           </svg>
           <span class="completion-percent">85%</span>
         </div>
@@ -215,8 +220,8 @@
         </div>
       </div>
       <div class="blockchain-status">
-        <svg class="blockchain-icon" viewBox="0 0 24 24">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 20.99V12H3.06C3.56 16.27 6.31 19.68 12 21.99z"/>
+        <svg class="blockchain-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path fill="#4CAF50" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 20.99V12H3.06C3.56 16.27 6.31 19.68 12 21.99z"/>
         </svg>
         <span>Blockchain Verified</span>
       </div>
