@@ -235,6 +235,32 @@
   transition: stroke-dashoffset 0.6s ease;
 }
 
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #4A5568;
+  font-size: 0.9rem;
+}
+
+.spinner-ring {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 74, 173, 0.1);
+  border-top: 3px solid #004aad;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Audit Trail Section */
 .audit-trail {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);

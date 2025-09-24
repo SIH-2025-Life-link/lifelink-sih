@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="audit-trail.css">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="new-statistics.css">
   <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body class="fade-out">
@@ -84,7 +85,7 @@
           <div class="icon-circle donation">₹</div>
         </div>
         <h3>Total Donations</h3>
-        <div class="stat-number donation-total">0</div>
+        <div class="stat-number donation-total" id="totalDonations">0</div>
         <p class="stat-text">Across <span class="transaction-count">3</span> transactions</p>
         <div id="donation-progress" class="progress-bar">
           <div class="progress"></div>
@@ -96,7 +97,7 @@
           <div class="icon-circle supply">📦</div>
         </div>
         <h3>Active Supplies</h3>
-        <div class="stat-number supplies-total">0</div>
+        <div class="stat-number supplies-total" id="activeSupplies">0</div>
         <p class="stat-text">Packages in transit</p>
         <div id="supplies-progress" class="progress-bar">
           <div class="progress"></div>
@@ -127,10 +128,12 @@
         <h3>Completion Rate</h3>
         <div class="completion-ring">
           <svg viewBox="0 0 36 36" class="circular-chart">
-            <path d="M18 2.0845
-              a 15.9155 15.9155 0 0 1 0 31.831
-              a 15.9155 15.9155 0 0 1 0 -31.831"
-              class="circle-bg"/>
+            <defs>
+              <linearGradient id="completionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+              </linearGradient>
+            </defs>
             <path d="M18 2.0845
               a 15.9155 15.9155 0 0 1 0 31.831
               a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -206,7 +209,7 @@
         <div class="legend-item">
           <span class="status-dot completed"></span>
           <span class="legend-label">Completed</span>
-          <span class="legend-count" id="completedCount">1</span>
+          <span class="legend-count" id="completedDonations">1</span>
         </div>
         <div class="legend-item">
           <span class="status-dot pending"></span>

@@ -104,34 +104,99 @@
 
 /* Completion Ring */
 .completion-ring {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     margin: 1.5rem auto;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    padding: 8px;
+    box-shadow:
+        0 4px 20px rgba(76, 175, 80, 0.15),
+        inset 0 2px 8px rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    animation: gentlePulse 3s ease-in-out infinite;
+}
+
+.completion-ring:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 6px 25px rgba(76, 175, 80, 0.2),
+        inset 0 3px 12px rgba(255, 255, 255, 0.9);
+}
+
+.completion-ring.high-completion {
+    animation: successPulse 2s ease-in-out infinite;
+    box-shadow:
+        0 8px 30px rgba(76, 175, 80, 0.3),
+        inset 0 4px 16px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(76, 175, 80, 0.4);
 }
 
 .circular-chart {
     width: 100%;
     height: 100%;
+    position: relative;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .circle-bg {
-    fill: none;
-    stroke: #f0f0f0;
-    stroke-width: 3;
+    display: none;
 }
 
 .circle {
     fill: none;
-    stroke: #4CAF50;
-    stroke-width: 3;
+    stroke: url(#completionGradient);
+    stroke-width: 6;
     stroke-linecap: round;
     transform: rotate(-90deg);
     transform-origin: center;
-    transition: stroke-dasharray 0.8s ease;
+    transition: stroke-dasharray 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 3px 8px rgba(76, 175, 80, 0.4));
+    animation: progressDraw 1.5s ease-out;
+}
+
+.circle.high-completion {
+    filter: drop-shadow(0 4px 12px rgba(76, 175, 80, 0.6));
+    stroke-width: 7;
+}
+
+.completion-percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2e7d32;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    transition: all 0.3s ease;
+    animation: numberScale 0.8s ease-out;
+}
+
+.completion-percent.high-completion {
+    font-size: 1.6rem;
+    text-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+    background: linear-gradient(135deg, #66bb6a 0%, #2e7d32 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* SVG Gradient for completion ring */
+.completion-ring svg {
+    position: absolute;
+    width: 0;
+    height: 0;
 }
 
 /* Supply Chart */
@@ -141,6 +206,11 @@
     gap: 0.75rem;
     margin-top: 1rem;
     padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.supply-chart:hover {
+    transform: translateY(-2px);
 }
 
 .chart-legend {
@@ -149,33 +219,64 @@
     gap: 0.5rem;
     color: #4A5568;
     font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.chart-legend:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .status-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.chart-legend:hover .status-dot {
+    transform: scale(1.2);
 }
 
 .status-dot.completed {
     background: #4CAF50;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
 }
 
 .status-dot.in-transit {
     background: #2196F3;
+    box-shadow: 0 0 6px rgba(33, 150, 243, 0.4);
 }
 
 .status-dot.pending {
     background: #FFC107;
+    box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
 }
 
 .legend-label {
     color: #4A5568;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.chart-legend:hover .legend-label {
+    color: #2D3748;
 }
 
 .legend-count {
     color: #718096;
     margin-left: 0.25rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.chart-legend:hover .legend-count {
+    color: #4A5568;
 }
 
 /* Refresh Controls */
@@ -236,12 +337,82 @@
     }
 
     .completion-ring {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
+    }
+
+    .completion-ring.high-completion {
+        box-shadow:
+            0 6px 25px rgba(76, 175, 80, 0.25),
+            inset 0 3px 12px rgba(255, 255, 255, 0.9),
+            0 0 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .circle.high-completion {
+        stroke-width: 6;
+    }
+
+    .completion-percent.high-completion {
+        font-size: 1.4rem;
     }
 }
 
 /* Animations */
+@keyframes gentlePulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow:
+            0 4px 20px rgba(76, 175, 80, 0.15),
+            inset 0 2px 8px rgba(255, 255, 255, 0.8);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow:
+            0 6px 25px rgba(76, 175, 80, 0.18),
+            inset 0 3px 10px rgba(255, 255, 255, 0.9);
+    }
+}
+
+@keyframes successPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 3px 8px rgba(76, 175, 80, 0.4));
+    }
+    50% {
+        transform: scale(1.03);
+        filter: drop-shadow(0 5px 15px rgba(76, 175, 80, 0.6));
+    }
+}
+
+@keyframes progressDraw {
+    0% {
+        stroke-dasharray: 0 100;
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        stroke-dasharray: var(--progress) 100;
+        opacity: 1;
+    }
+}
+
+@keyframes numberScale {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);
