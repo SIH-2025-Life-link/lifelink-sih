@@ -63,6 +63,12 @@ function updateSupplyChart(delivered, inTransit, pending) {
     if (suppliesElement) {
         animateNumber(suppliesElement, parseInt(suppliesElement.textContent.replace(/,/g, '')) || 0, totalSupplies, 1000);
     }
+
+    // Update transaction count
+    const transactionCount = document.querySelector('.transaction-count');
+    if (transactionCount) {
+        transactionCount.textContent = Math.floor(totalSupplies / 3); // Rough estimate
+    }
 }
 
 // Initialize statistics
