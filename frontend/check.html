@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="check.css">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="language-toggle.css">
   <script src="qr.js" defer></script>
   <!-- Leaflet Map (for live package tracking) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -45,54 +46,54 @@
         <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="add.html">Add Relief</a></li>
-        <li><a href="check.html" class="active" aria-current="page">Check Relief</a></li>
-        <li><a href="index.html#audit-trail" class="highlight">Audit Trail</a></li>
+        <li><a href="index.html" data-key="nav.home">Home</a></li>
+        <li><a href="about.html" data-key="nav.about">About Us</a></li>
+        <li><a href="add.html" data-key="nav.add">Add Relief</a></li>
+        <li><a href="check.html" class="active" aria-current="page" data-key="nav.check">Check Relief</a></li>
+        <li><a href="index.html#audit-trail" class="highlight" data-key="nav.audit">Audit Trail</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
     <section class="verify-section fade-up" aria-labelledby="verify-heading">
-      <h2 id="verify-heading">Relief Verification &amp; Audit</h2>
+      <h2 id="verify-heading" data-key="check.title">Relief Verification &amp; Audit</h2>
 
       <!-- Login Panel -->
       <div id="loginPanel" class="card" aria-live="polite">
-        <h3>Secure Login <span aria-label="for NGO, Government, or Admin" title="NGO / Gov’t / Admin">🔒</span></h3>
+        <h3 data-key="check.loginTitle">Secure Login <span aria-label="for NGO, Government, or Admin" title="NGO / Gov't / Admin">🔒</span></h3>
         <form id="loginForm" autocomplete="on">
-          <label for="loginUsername">Username</label>
+          <label for="loginUsername" data-key="check.usernameLabel">Username</label>
           <input type="text" id="loginUsername" name="username" placeholder="Username" autocomplete="username" required>
-          <label for="loginPassword">Password</label>
+          <label for="loginPassword" data-key="check.passwordLabel">Password</label>
           <input type="password" id="loginPassword" name="password" placeholder="Password" autocomplete="current-password" required>
-          <button class="btn" type="submit">Login</button>
+          <button class="btn" type="submit" data-key="check.loginBtn">Login</button>
         </form>
         <p id="loginMessage" role="alert"></p>
       </div>
 
       <!-- Public Verification -->
       <div id="verifyPanel" class="card" aria-live="polite">
-        <h3>Verify Relief Record <span title="Public Verification">🔍</span></h3>
+        <h3 data-key="check.verifyTitle">Verify Relief Record <span title="Public Verification">🔍</span></h3>
         <form id="verifyForm" autocomplete="off">
-          <label for="txHashInput">Transaction Hash</label>
+          <label for="txHashInput" data-key="check.txHashLabel">Transaction Hash</label>
           <input type="text" id="txHashInput" name="txHash" placeholder="Enter Transaction Hash" required>
-          <button class="btn" type="submit">Verify</button>
+          <button class="btn" type="submit" data-key="check.verifyBtn">Verify</button>
         </form>
         <div id="verifyResult" class="result-box" tabindex="0"></div>
       </div>
 
       <!-- Audit Trail -->
       <div id="auditPanel" class="card" style="display:none;" aria-live="polite">
-        <h3>Audit Trail <span title="Authorized Roles Only">🛡️</span></h3>
-        <button class="btn" id="loadAuditBtn" type="button">Load Audit Trail</button>
+        <h3 data-key="check.auditTitle">Audit Trail <span title="Authorized Roles Only">🛡️</span></h3>
+        <button class="btn" id="loadAuditBtn" type="button" data-key="check.loadAuditBtn">Load Audit Trail</button>
         <div id="auditResult" class="result-box" tabindex="0"></div>
       </div>
     </section>
   </main>
 
   <footer class="fade-up">
-    <p> 2025 LifeLink. All rights reserved.</p>
+    <p data-key="footer.copyright">© 2025 LifeLink. All rights reserved.</p>
   </footer>
 
   <script>
@@ -419,5 +420,6 @@
       document.getElementById("loadAuditBtn").addEventListener("click", loadAuditTrail);
     });
   </script>
+  <script src="language-translator.js"></script>
 </body>
 </html>

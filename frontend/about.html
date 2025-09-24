@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="language-toggle.css">
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
 </head>
 <body>
@@ -17,11 +18,11 @@
                 <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
             </a>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html" class="active">About Us</a></li>
-                <li><a href="add.html">Add Relief</a></li>
-                <li><a href="check.html">Check Relief</a></li>
-                <li><a href="index.html#audit-trail" class="highlight">Audit Trail</a></li>
+                <li><a href="index.html" data-key="nav.home">Home</a></li>
+                <li><a href="about.html" class="active" data-key="nav.about">About Us</a></li>
+                <li><a href="add.html" data-key="nav.add">Add Relief</a></li>
+                <li><a href="check.html" data-key="nav.check">Check Relief</a></li>
+                <li><a href="index.html#audit-trail" class="highlight" data-key="nav.audit">Audit Trail</a></li>
             </ul>
         </nav>
     </header>
@@ -30,15 +31,15 @@
     <section class="hero fade-up">
         <canvas id="bgCanvas" aria-hidden="true"></canvas>
         <div class="hero-content">
-            <h1>About LifeLink</h1>
-            <p class="tagline">Dedicated to Transparent and Accountable Disaster Relief</p>
+            <h1 data-key="about.title">About LifeLink</h1>
+            <p class="tagline" data-key="about.tagline">Dedicated to Transparent and Accountable Disaster Relief</p>
         </div>
     </section>
 
     <!-- About Us Section -->
     <section class="about fade-up">
-        <h2>Meet Our Team</h2>
-        <p class="about-intro">
+        <h2 data-key="about.team">Meet Our Team</h2>
+        <p class="about-intro" data-key="about.intro">
             LifeLink is a student-driven initiative dedicated to making disaster relief transparent and accountable.<br>
             We leverage blockchain technology to ensure aid reaches those who need it most, and that every transaction is traceable.
         </p>
@@ -89,7 +90,7 @@
     </section>
 
     <footer>
-        <p>© 2025 LifeLink. All rights reserved.</p>
+        <p data-key="footer.copyright">© 2025 LifeLink. All rights reserved.</p>
     </footer>
 
     <script>
@@ -106,5 +107,6 @@
         window.addEventListener('DOMContentLoaded', showOnScroll);
     </script>
     <script src="script.js"></script>
+    <script src="language-translator.js"></script>
 </body>
 </html>

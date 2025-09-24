@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="language-toggle.css">
   <link rel="stylesheet" href="add.css">
 </head>
 <body class="fade-out">
@@ -18,11 +19,11 @@
         <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="add.html" class="active">Add Relief</a></li>
-        <li><a href="check.html">Check Relief</a></li>
-        <li><a href="index.html#audit-trail" class="highlight">Audit Trail</a></li>
+        <li><a href="index.html" data-key="nav.home">Home</a></li>
+        <li><a href="about.html" data-key="nav.about">About Us</a></li>
+        <li><a href="add.html" class="active" data-key="nav.add">Add Relief</a></li>
+        <li><a href="check.html" data-key="nav.check">Check Relief</a></li>
+        <li><a href="index.html#audit-trail" class="highlight" data-key="nav.audit">Audit Trail</a></li>
       </ul>
     </nav>
   </header>
@@ -40,8 +41,8 @@
           <line x1="8" y1="12" x2="16" y2="12"/>
         </svg>
       </div>
-      <h1 class="hero-title fade-up">Add Relief</h1>
-      <p class="hero-subtitle fade-up tagline">Submit relief resource details here</p>
+      <h1 class="hero-title fade-up" data-key="add.title">Add Relief</h1>
+      <p class="hero-subtitle fade-up tagline" data-key="add.subtitle">Submit relief resource details here</p>
       <div class="hero-divider"></div>
     </div>
   </section>
@@ -50,42 +51,42 @@
   <main class="content-wrapper">
     <div class="form-container">
       <div class="form-header">
-        <h2>Relief Submission Form</h2>
-        <p>Help those in need by providing relief resources</p>
+        <h2 data-key="add.formTitle">Relief Submission Form</h2>
+        <p data-key="add.formSubtitle">Help those in need by providing relief resources</p>
       </div>
       
       <!-- Important Notice -->
       <div class="important-notice">
         <div class="important-notice-content">
-          <h3>Important Notice</h3>
-          <p>This form is for official relief submissions only. Please review all details carefully — once submitted, your entry cannot be cancelled.</p>
+          <h3 data-key="add.importantNotice">Important Notice</h3>
+          <p data-key="add.importantNoticeDesc">This form is for official relief submissions only. Please review all details carefully — once submitted, your entry cannot be cancelled.</p>
         </div>
       </div>
       
-      <div class="status-message success" id="successMessage">
+      <div class="status-message success" id="successMessage" data-key="add.successMessage">
         Relief details submitted successfully!
       </div>
 
       <!-- Tracking Credentials (shown after successful submit) -->
       <div id="credsCard" class="creds-card" style="display:none;" aria-live="polite">
-        <div class="creds-header">Track Your Relief</div>
-        <p class="creds-sub">Use these credentials on the Check Relief page to view live updates.</p>
+        <div class="creds-header" data-key="add.trackRelief">Track Your Relief</div>
+        <p class="creds-sub" data-key="add.trackReliefDesc">Use these credentials on the Check Relief page to view live updates.</p>
         <div class="creds-grid">
           <div class="creds-item">
-            <span class="label">ID</span>
+            <span class="label" data-key="add.idLabel">ID</span>
             <code class="value" id="trackIdValue">admin</code>
-            <button type="button" class="copy-btn" data-copy-target="#trackIdValue">Copy</button>
+            <button type="button" class="copy-btn" data-copy-target="#trackIdValue" data-key="add.copyBtn">Copy</button>
           </div>
           <div class="creds-item">
-            <span class="label">Password</span>
+            <span class="label" data-key="add.passwordLabel">Password</span>
             <code class="value" id="trackPwValue">admin123</code>
-            <button type="button" class="copy-btn" data-copy-target="#trackPwValue">Copy</button>
+            <button type="button" class="copy-btn" data-copy-target="#trackPwValue" data-key="add.copyBtn">Copy</button>
           </div>
         </div>
-        <a class="creds-link" href="check.html">Go to Check Relief →</a>
+        <a class="creds-link" href="check.html" data-key="add.goToCheckRelief">Go to Check Relief →</a>
       </div>
       
-      <div class="status-message error" id="errorMessage">
+      <div class="status-message error" id="errorMessage" data-key="add.errorMessage">
         Error submitting relief details. Please try again.
       </div>
       
@@ -99,98 +100,73 @@
             </svg>
           </div>
           <div>
-            <h3 class="id-pass-title">Your Relief ID</h3>
-            <p class="id-pass-subtitle">Save these credentials to track your relief status</p>
+            <h3 class="id-pass-title" data-key="add.reliefIdTitle">Your Relief ID</h3>
+            <p class="id-pass-subtitle" data-key="add.reliefIdDesc">Save these credentials to track your relief status</p>
           </div>
         </div>
         
         <div class="id-pass-grid">
           <div class="id-pass-item">
-            <span class="id-pass-label">Relief ID</span>
+            <span class="id-pass-label" data-key="add.reliefIdLabel">Relief ID</span>
             <div class="id-pass-value" id="reliefIdDisplay">admin</div>
-            <button type="button" class="copy-btn" onclick="copyToClipboard('reliefIdDisplay')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              Copy ID
-            </button>
+            <button type="button" class="copy-btn" onclick="copyToClipboard('reliefIdDisplay')" data-key="add.copyIdBtn">Copy ID</button>
           </div>
           
           <div class="id-pass-item">
-            <span class="id-pass-label">Password</span>
+            <span class="id-pass-label" data-key="add.passwordLabel">Password</span>
             <div class="id-pass-value" id="reliefPasswordDisplay">admin123</div>
-            <button type="button" class="copy-btn" onclick="copyToClipboard('reliefPasswordDisplay')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              Copy Password
-            </button>
+            <button type="button" class="copy-btn" onclick="copyToClipboard('reliefPasswordDisplay')" data-key="add.copyPasswordBtn">Copy Password</button>
           </div>
         </div>
         
         <div class="id-pass-actions">
-          <a href="check.html" class="id-pass-link">
-            Track Relief Status
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-          <button type="button" class="print-btn" onclick="window.print()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 6 2 18 2 18 9"></polyline>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-              <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-            Print
-          </button>
+          <a href="check.html" class="id-pass-link" data-key="add.trackReliefStatus">Track Relief Status</a>
+          <button type="button" class="print-btn" onclick="window.print()" data-key="add.printBtn">Print</button>
         </div>
       </div>
 
       <form class="relief-form" id="reliefForm">
         <div class="form-group">
-          <label for="reliefType">Relief Type</label>
+          <label for="reliefType" data-key="add.reliefTypeLabel">Relief Type</label>
           <select id="reliefType" name="reliefType" required>
-            <option value="">Select relief type...</option>
-            <option value="Food">Food & Water</option>
-            <option value="Shelter">Shelter</option>
-            <option value="Medical">Medical Supplies</option>
-            <option value="Clothing">Clothing</option>
-            <option value="Other">Other</option>
+            <option value="" data-key="add.selectReliefType">Select relief type...</option>
+            <option value="Food" data-key="add.foodWater">Food & Water</option>
+            <option value="Shelter" data-key="add.shelter">Shelter</option>
+            <option value="Medical" data-key="add.medical">Medical Supplies</option>
+            <option value="Clothing" data-key="add.clothing">Clothing</option>
+            <option value="Other" data-key="add.other">Other</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="location">Location</label>
+          <label for="location" data-key="add.locationLabel">Location</label>
           <input type="text" id="location" name="location" placeholder="City / Region" required>
         </div>
 
         <div class="form-group">
-          <label for="contact">Contact Information</label>
+          <label for="contact" data-key="add.contactLabel">Contact Information</label>
           <input type="text" id="contact" name="contact" placeholder="Phone or Email" required>
         </div>
 
         <div class="form-group">
-          <label for="quantity">Quantity/Capacity</label>
+          <label for="quantity" data-key="add.quantityLabel">Quantity/Capacity</label>
           <input type="text" id="quantity" name="quantity" placeholder="E.g., 100 meals, 50 beds..." required>
         </div>
 
         <div class="form-group">
-          <label for="details">Additional Details</label>
+          <label for="details" data-key="add.detailsLabel">Additional Details</label>
           <textarea id="details" name="details" rows="4" placeholder="Provide any relevant information about the relief resources..."></textarea>
         </div>
 
-        <button type="submit" class="submit-btn">Submit Relief Details</button>
+        <button type="submit" class="submit-btn" data-key="add.submitBtn">Submit Relief Details</button>
       </form>
 
-      <p class="form-note">All fields marked with * are required. Your contact information will only be shared with verified relief seekers.</p>
+      <p class="form-note" data-key="add.formNote">All fields marked with * are required. Your contact information will only be shared with verified relief seekers.</p>
     </div>
   </main>
 
   <footer>
-    &copy; 2024 ReliefConnect. All rights reserved.
+    <p data-key="footer.copyright">© 2025 LifeLink. All rights reserved.</p>
   </footer>
 
   <script>
@@ -204,5 +180,6 @@
   </script>
   <script src="script.js"></script>
   <script src="add.js"></script>
+  <script src="language-translator.js"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="audit-trail.css">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="language-toggle.css">
   <link rel="stylesheet" href="new-statistics.css">
   <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
@@ -19,11 +20,11 @@
         <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="add.html">Add Relief</a></li>
-        <li><a href="check.html">Check Relief</a></li>
-        <li><a href="#audit-trail" class="highlight">Audit Trail</a></li>
+        <li><a href="index.html" class="active" data-key="nav.home">Home</a></li>
+        <li><a href="about.html" data-key="nav.about">About Us</a></li>
+        <li><a href="add.html" data-key="nav.add">Add Relief</a></li>
+        <li><a href="check.html" data-key="nav.check">Check Relief</a></li>
+        <li><a href="#audit-trail" class="highlight" data-key="nav.audit">Audit Trail</a></li>
       </ul>
     </nav>
   </header>
@@ -32,27 +33,27 @@
   <section class="hero">
     <canvas id="bgCanvas" aria-hidden="true"></canvas>
     <div class="hero-content fade-up">
-      <h1>LifeLink</h1>
-      <p class="tagline">Transparent Disaster Relief Tracking using Blockchain</p>
-      <a href="add.html" class="btn" aria-label="Get Started with LifeLink">Get Started</a>
+      <h1 data-key="hero.title">LifeLink</h1>
+      <p class="tagline" data-key="hero.tagline">Transparent Disaster Relief Tracking using Blockchain</p>
+      <a href="add.html" class="btn" aria-label="Get Started with LifeLink" data-key="hero.getStarted">Get Started</a>
     </div>
   </section>
 
   <!-- Our Values Section -->
   <section class="values fade-up">
-    <h2>Our Core Values</h2>
+    <h2 data-key="values.title">Our Core Values</h2>
     <div class="cards">
       <div class="card">
-        <h3>Transparency</h3>
-        <p>Every relief operation is tracked on blockchain for trust and accountability.</p>
+        <h3 data-key="values.transparency">Transparency</h3>
+        <p data-key="values.transparencyDesc">Every relief operation is tracked on blockchain for trust and accountability.</p>
       </div>
       <div class="card">
-        <h3>Efficiency</h3>
-        <p>Ensure timely and fair distribution of aid during disasters.</p>
+        <h3 data-key="values.efficiency">Efficiency</h3>
+        <p data-key="values.efficiencyDesc">Ensure timely and fair distribution of aid during disasters.</p>
       </div>
       <div class="card">
-        <h3>Impact</h3>
-        <p>Empowering citizens and NGOs with reliable, real-time information.</p>
+        <h3 data-key="values.impact">Impact</h3>
+        <p data-key="values.impactDesc">Empowering citizens and NGOs with reliable, real-time information.</p>
       </div>
     </div>
   </section>
@@ -78,13 +79,13 @@
 
   <!-- Live Statistics Section -->
   <section id="statistics" class="statistics fade-up">
-    <h2>Live Statistics</h2>
+    <h2 data-key="stats.title">Live Statistics</h2>
     <div class="stat-cards">
       <div class="stat-card">
         <div class="stat-icon">
           <div class="icon-circle donation">₹</div>
         </div>
-        <h3>Total Donations</h3>
+        <h3 data-key="stats.totalDonations">Total Donations</h3>
         <div class="stat-number donation-total" id="totalDonations">0</div>
         <p class="stat-text">Across <span class="transaction-count">3</span> transactions</p>
         <div id="donation-progress" class="progress-bar">
@@ -112,7 +113,7 @@
         <div class="stat-icon">
           <div class="icon-circle supply">📦</div>
         </div>
-        <h3>Active Supplies</h3>
+        <h3 data-key="stats.activeSupplies">Active Supplies</h3>
         <div class="stat-number supplies-total" id="activeSupplies">0</div>
         <p class="stat-text">Packages in transit</p>
         <div id="supplies-progress" class="progress-bar">
@@ -141,7 +142,7 @@
         <div class="stat-icon">
           <div class="icon-circle completed">✅</div>
         </div>
-        <h3>Completion Rate</h3>
+        <h3 data-key="stats.completionRate">Completion Rate</h3>
         <div class="completion-ring">
           <svg viewBox="0 0 36 36" class="circular-chart">
             <defs>
@@ -178,14 +179,14 @@
     </div>
 
     <div class="refresh-timer">
-      <span>Next update in </span>
+      <span data-key="stats.nextUpdate">Next update in </span>
       <span class="refresh-countdown">60</span>
-      <span> seconds</span>
+      <span data-key="stats.seconds"> seconds</span>
       <button class="refresh-btn">
         <svg class="refresh-icon" viewBox="0 0 24 24">
           <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
         </svg>
-        Refresh Now
+        <span data-key="stats.refreshNow">Refresh Now</span>
       </button>
     </div>
   </section>
@@ -193,20 +194,20 @@
   <!-- Audit Trail Section -->
   <section id="audit-trail" class="audit-trail fade-up">
     <div class="section-header">
-      <h2>Recent Transactions</h2>
+      <h2 data-key="audit.title">Recent Transactions</h2>
       <div class="filter-controls">
         <div class="search-box">
-          <input type="text" id="searchAudit" placeholder="Search transactions...">
+          <input type="text" id="searchAudit" placeholder="Search transactions..." data-key="audit.search">
           <svg class="search-icon" viewBox="0 0 24 24">
             <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
           </svg>
         </div>
         <div class="date-filter">
           <select id="dateFilter">
-            <option value="all">All Time</option>
-            <option value="today">Today</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
+            <option value="all" data-key="audit.allTime">All Time</option>
+            <option value="today" data-key="audit.today">Today</option>
+            <option value="week" data-key="audit.thisWeek">This Week</option>
+            <option value="month" data-key="audit.thisMonth">This Month</option>
           </select>
         </div>
       </div>
@@ -217,14 +218,14 @@
         <svg class="tab-icon" viewBox="0 0 24 24">
           <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
         </svg>
-        Donations
+        <span data-key="audit.donations">Donations</span>
         <span class="tab-count" id="donationsCount">3</span>
       </button>
       <button class="tab-btn" data-tab="supplies" role="tab" aria-selected="false">
         <svg class="tab-icon" viewBox="0 0 24 24">
           <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
         </svg>
-        Supplies
+        <span data-key="audit.supplies">Supplies</span>
         <span class="tab-count" id="suppliesCount">1</span>
       </button>
     </div>
@@ -240,17 +241,17 @@
       <div class="audit-legend">
         <div class="legend-item">
           <span class="status-dot completed"></span>
-          <span class="legend-label">Completed</span>
+          <span class="legend-label" data-key="audit.completed">Completed</span>
           <span class="legend-count" id="completedDonations">1</span>
         </div>
         <div class="legend-item">
           <span class="status-dot pending"></span>
-          <span class="legend-label">Pending</span>
+          <span class="legend-label" data-key="audit.pending">Pending</span>
           <span class="legend-count" id="pendingCount">2</span>
         </div>
         <div class="legend-item">
           <span class="status-dot in-transit"></span>
-          <span class="legend-label">In Transit</span>
+          <span class="legend-label" data-key="audit.inTransit">In Transit</span>
           <span class="legend-count" id="transitCount">1</span>
         </div>
       </div>
@@ -258,14 +259,14 @@
         <svg class="blockchain-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
           <path fill="#4CAF50" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 20.99V12H3.06C3.56 16.27 6.31 19.68 12 21.99z"/>
         </svg>
-        <span>Blockchain Verified</span>
+        <span data-key="audit.blockchainVerified">Blockchain Verified</span>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="fade-up">
-    <p>© 2025 LifeLink. All rights reserved.</p>
+    <p data-key="footer.copyright">© 2025 LifeLink. All rights reserved.</p>
   </footer>
 
   <script>
@@ -282,5 +283,6 @@
   <script src="audit-trail.js"></script>
   <script src="canvas-bg.js"></script>
   <script src="new-statistics.js"></script>
+  <script src="language-translator.js"></script>
 </body>
 </html>

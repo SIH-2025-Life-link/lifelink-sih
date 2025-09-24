@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="style.css" rel="stylesheet">
   <link href="navbar.css" rel="stylesheet">
+  <link href="language-toggle.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/lifelink-logo.png">
 </head>
 <body class="fade-out">
@@ -15,45 +16,45 @@
         <img src="assets/lifelink-logo.png" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="add.html">Add Relief</a></li>
-        <li><a href="check.html">Check Relief</a></li>
-        <li><a href="funds.html" class="active">Funds Portal</a></li>
+        <li><a href="index.html" data-key="nav.home">Home</a></li>
+        <li><a href="about.html" data-key="nav.about">About Us</a></li>
+        <li><a href="add.html" data-key="nav.add">Add Relief</a></li>
+        <li><a href="check.html" data-key="nav.check">Check Relief</a></li>
+        <li><a href="funds.html" class="active" data-key="funds.title">Funds Portal</a></li>
       </ul>
     </nav>
   </header>
 
   <section class="hero fade-up">
-    <h1>Funds Portal</h1>
-    <p class="tagline">Secure Donations for Disaster Relief</p>
+    <h1 data-key="funds.title">Funds Portal</h1>
+    <p class="tagline" data-key="funds.subtitle">Secure Donations for Disaster Relief</p>
   </section>
 
   <section class="fade-up">
-    <h2>1. Initialize Secure Session</h2>
-    <input type="text" id="userId" placeholder="Enter your User ID">
-    <button onclick="initSession()">Start Secure Session</button>
+    <h2 data-key="funds.initSession">1. Initialize Secure Session</h2>
+    <input type="text" id="userId" placeholder="Enter your User ID" data-key="funds.userIdPlaceholder">
+    <button onclick="initSession()" data-key="funds.startSession">Start Secure Session</button>
     <p id="sessionInfo"></p>
   </section>
 
   <section class="fade-up">
-    <h2>2. Donate</h2>
-    <input type="number" id="amount" placeholder="Amount (INR)">
-    <input type="text" id="purpose" placeholder="Purpose (optional)">
-    <input type="text" id="donorName" placeholder="Your Name">
-    <input type="email" id="donorEmail" placeholder="Your Email">
-    <button onclick="donateFunds()">Donate</button>
+    <h2 data-key="funds.donate">2. Donate</h2>
+    <input type="number" id="amount" placeholder="Amount (INR)" data-key="funds.amountPlaceholder">
+    <input type="text" id="purpose" placeholder="Purpose (optional)" data-key="funds.purposePlaceholder">
+    <input type="text" id="donorName" placeholder="Your Name" data-key="funds.namePlaceholder">
+    <input type="email" id="donorEmail" placeholder="Your Email" data-key="funds.emailPlaceholder">
+    <button onclick="donateFunds()" data-key="funds.donateBtn">Donate</button>
     <p id="donateResult"></p>
   </section>
 
   <section class="fade-up">
-    <h2>3. View Ledger (for demo)</h2>
-    <button onclick="viewLedger()">View All Donations</button>
+    <h2 data-key="funds.viewLedger">3. View Ledger (for demo)</h2>
+    <button onclick="viewLedger()" data-key="funds.viewLedgerBtn">View All Donations</button>
     <pre id="ledger"></pre>
   </section>
 
   <footer>
-    <p>© 2025 LifeLink. All rights reserved.</p>
+    <p data-key="footer.copyright">© 2025 LifeLink. All rights reserved.</p>
   </footer>
 
   <script>
@@ -121,5 +122,6 @@
         res.ok ? JSON.stringify(data, null, 2) : "Error: " + data.message;
     }
   </script>
+  <script src="language-translator.js"></script>
 </body>
 </html>

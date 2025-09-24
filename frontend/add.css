@@ -336,7 +336,7 @@ body::before {
 .form-header h2::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -8px;   
     left: 0;
     width: 60px;
     height: 4px;

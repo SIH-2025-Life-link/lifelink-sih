@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="language-toggle.css">
   <link rel="stylesheet" href="new-styles.css">
   <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
 </head>
@@ -17,67 +18,68 @@
         <img src="assets/logo.jpg" alt="LifeLink" class="nav-logo">
       </a>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="add.html">Add Relief</a></li>
-        <li><a href="check.html">Check Relief</a></li>
-        <li><a href="index.html#audit-trail" class="highlight">Audit Trail</a></li>
-        <li><a href="feedback.html" class="active">Feedback</a></li>
+        <li><a href="index.html" data-key="nav.home">Home</a></li>
+        <li><a href="about.html" data-key="nav.about">About Us</a></li>
+        <li><a href="add.html" data-key="nav.add">Add Relief</a></li>
+        <li><a href="check.html" data-key="nav.check">Check Relief</a></li>
+        <li><a href="index.html#audit-trail" class="highlight" data-key="nav.audit">Audit Trail</a></li>
+        <li><a href="feedback.html" class="active" data-key="feedback.title">Feedback</a></li>
       </ul>
     </nav>
   </header>
 
   <section class="hero small-hero">
     <div class="hero-content">
-      <h1>Feedback & Grievances</h1>
-      <p class="tagline">Report issues, send suggestions, or share your experience.</p>
+      <h1 data-key="feedback.title">Feedback & Grievances</h1>
+      <p class="tagline" data-key="feedback.subtitle">Report issues, send suggestions, or share your experience.</p>
     </div>
   </section>
 
   <main class="content-wrapper">
     <div class="form-container">
       <div class="form-header">
-        <h2>Tell Us What Happened</h2>
-        <p>We use your reports to improve relief operations and transparency.</p>
+        <h2 data-key="feedback.formTitle">Tell Us What Happened</h2>
+        <p data-key="feedback.formDesc">We use your reports to improve relief operations and transparency.</p>
       </div>
 
-      <div id="fbSuccess" class="status-message success" role="alert">Thanks! Your message has been submitted.</div>
-      <div id="fbError" class="status-message error" role="alert">Could not submit. Saved locally and will sync later.</div>
+      <div id="fbSuccess" class="status-message success" role="alert" data-key="feedback.success">Thanks! Your message has been submitted.</div>
+      <div id="fbError" class="status-message error" role="alert" data-key="feedback.error">Could not submit. Saved locally and will sync later.</div>
 
       <form id="feedbackForm" class="relief-form">
         <div class="form-group">
-          <label for="fbName">Your Name (optional)</label>
+          <label for="fbName" data-key="feedback.nameLabel">Your Name (optional)</label>
           <input id="fbName" name="name" type="text" placeholder="Full name">
         </div>
         <div class="form-group">
-          <label for="fbContact">Contact (phone or email)</label>
+          <label for="fbContact" data-key="feedback.contactLabel">Contact (phone or email)</label>
           <input id="fbContact" name="contact" type="text" placeholder="you@example.com" required>
         </div>
         <div class="form-group">
-          <label for="fbType">Category</label>
+          <label for="fbType" data-key="feedback.categoryLabel">Category</label>
           <select id="fbType" name="type" required>
-            <option value="">Select...</option>
-            <option value="issue">Issue / Complaint</option>
-            <option value="suggestion">Suggestion</option>
-            <option value="thanks">Appreciation</option>
+            <option value="" data-key="feedback.selectCategory">Select...</option>
+            <option value="issue" data-key="feedback.issue">Issue / Complaint</option>
+            <option value="suggestion" data-key="feedback.suggestion">Suggestion</option>
+            <option value="thanks" data-key="feedback.appreciation">Appreciation</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="fbMessage">Message</label>
+          <label for="fbMessage" data-key="feedback.messageLabel">Message</label>
           <textarea id="fbMessage" name="message" rows="5" placeholder="Describe the issue, location, and any IDs involved..." required></textarea>
         </div>
-        <button class="submit-btn" type="submit">Submit</button>
+        <button class="submit-btn" type="submit" data-key="feedback.submitBtn">Submit</button>
       </form>
 
-      <p class="form-note hint">We never share your contact publicly. Sensitive data is handled securely.</p>
+      <p class="form-note hint" data-key="feedback.note">We never share your contact publicly. Sensitive data is handled securely.</p>
     </div>
   </main>
 
   <footer>
-    © 2025 LifeLink. All rights reserved.
+    <p data-key="footer.copyright">© 2025 LifeLink. All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
   <script src="feedback.js"></script>
+  <script src="language-translator.js"></script>
 </body>
 </html>
