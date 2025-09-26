@@ -338,10 +338,84 @@ app.get("/verifyRecord/:id", async (req, res) => {
   return res.status(404).json({ message: "not found" });
 });
 
+// ----------- Public Statistics (no auth required) ------------
+app.get("/public/stats", async (req, res) => {
+  try {
+    const ledger = await fs.readJson(LEDGER_FILE);
+    res.json({
+      statistics: ledger.statistics,
+      donations: ledger.donations,
+      supplies: ledger.supplies
+    });
+  } catch (error) {
+    console.error("Error fetching public stats:", error);
+    res.status(500).json({ message: "Error fetching statistics" });
+  }
+});
+
 // ----------- Audit Trail ------------
 app.get("/auditTrail", authMiddleware, requireRole("admin", "govt", "auditor"), async (req, res) => {
   const ledger = await fs.readJson(LEDGER_FILE);
   return res.json({ donations: ledger.donations, supplies: ledger.supplies });
+});
+
+// ----------- Feedback ------------
+// Simple feedback storage in ledger
+app.post("/feedback", async (req, res) => {
+  try {
+    const { name, email, subject, message, type = "general" } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({ message: "Name, email, and message are required" });
+    }
+
+    const ledger = await fs.readJson(LEDGER_FILE);
+    const feedbackId = generateId("FB");
+
+    const feedbackRecord = {
+      id: feedbackId,
+      type: "feedback",
+      details: {
+        name,
+        email,
+        subject,
+        message,
+        type
+      },
+      tracking: {
+        status: "received",
+        createdAt: new Date().toISOString()
+      }
+    };
+
+    ledger.feedback = ledger.feedback || [];
+    ledger.feedback.push(feedbackRecord);
+
+    await fs.writeJson(LEDGER_FILE, ledger, { spaces: 2 });
+
+    return res.json({ message: "Feedback submitted successfully", id: feedbackId });
+  } catch (err) {
+    console.error('Feedback error:', err);
+    return res.status(500).json({ message: "Error submitting feedback" });
+  }
+});
+
+// ----------- Static file serving for frontend -----------
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+
+// ----------- API routes -----------
+app.get("/api", (req, res) => {
+  res.json({
+    message: "LifeLink API is running!",
+    endpoints: {
+      donations: "/api/donations",
+      supplies: "/api/supplies",
+      users: "/api/users",
+      audit: "/api/auditTrail (requires auth)",
+      "public-stats": "/api/public/stats (no auth)",
+      feedback: "/api/feedback",
+      verify: "/verifyRecord/:id"
+    }
+  });
 });
 
 // ----------- Start server ------------
