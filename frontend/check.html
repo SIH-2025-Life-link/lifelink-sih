@@ -322,7 +322,7 @@
         return;
       }
       try {
-        const resp = await fetch(API_BASE + "/auditTrail", {
+        const resp = await fetch(API_BASE + "/public/stats", {
           method: "GET",
           headers: { "Authorization": "Bearer " + authToken }
         });

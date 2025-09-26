@@ -128,16 +128,31 @@ function animateValue(element, start, end, duration) {
 
 // Audit Trail Functionality
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔄 Audit Trail JavaScript loaded');
+
     // Initialize statistics and data
     loadStatistics();
     loadAuditTrail('donations');
 
+    // Initialize additional features
+    initializeRefreshTimer();
+    setupSearchAndFilters();
+
     // Setup tab switching with animations
     const tabs = document.querySelectorAll('.tab-btn');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            if (tab.classList.contains('active')) return;
+    console.log('📋 Found tabs:', tabs.length);
 
+    tabs.forEach((tab, index) => {
+        console.log(`Tab ${index}:`, tab.dataset.tab, tab.classList.contains('active'));
+
+        tab.addEventListener('click', (e) => {
+            console.log('🖱️ Tab clicked:', tab.dataset.tab);
+            if (tab.classList.contains('active')) {
+                console.log('⚠️ Tab already active, ignoring click');
+                return;
+            }
+
+            console.log('🔄 Switching to tab:', tab.dataset.tab);
             tabs.forEach(t => {
                 t.classList.remove('active');
                 t.setAttribute('aria-selected', 'false');
@@ -171,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadStatistics() {
     try {
-        const response = await fetch('http://localhost:5000/audit-trail');
+        const response = await fetch('http://localhost:5000/public/stats');
         const data = await response.json();
 
         // Update statistics with animations
@@ -204,49 +219,71 @@ async function loadStatistics() {
 
 function loadMockStatistics() {
     const mockStats = {
-        totalDonations: 25000,
-        totalSupplies: 1850,
-        completedDonations: 2
+        statistics: {
+            totalDonations: 73000,
+            totalSupplies: 3,
+            lastDonationDate: new Date().toISOString(),
+            lastSupplyDate: new Date().toISOString()
+        },
+        donations: [
+            { id: "DON_MOCK_01", tracking: { status: "completed" } },
+            { id: "DON_MOCK_02", tracking: { status: "completed" } },
+            { id: "DON_MOCK_03", tracking: { status: "pending" } }
+        ],
+        supplies: [
+            { id: "SUP_MOCK_01", tracking: { status: "in_transit" } },
+            { id: "SUP_MOCK_02", tracking: { status: "delivered" } }
+        ]
     };
 
     const totalDonationsEl = document.getElementById('totalDonations');
     if (totalDonationsEl) {
-        animateValue(totalDonationsEl, 0, mockStats.totalDonations, 1500);
+        animateValue(totalDonationsEl, 0, mockStats.statistics.totalDonations, 1500);
     }
 
     const activeSuppliesEl = document.getElementById('activeSupplies');
     if (activeSuppliesEl) {
         const currentSupplies = parseInt(activeSuppliesEl.textContent) || 0;
-        animateValue(activeSuppliesEl, currentSupplies, mockStats.totalSupplies, 1000);
+        animateValue(activeSuppliesEl, currentSupplies, mockStats.statistics.totalSupplies, 1000);
     }
 
     const completedEl = document.getElementById('completedDonations');
     if (completedEl) {
-        animateValue(completedEl, 0, mockStats.completedDonations, 1000);
+        const completedCount = mockStats.donations.filter(d => d.tracking.status === 'completed').length;
+        animateValue(completedEl, 0, completedCount, 1000);
     }
 
-    // Update completion circle (85% based on our earlier data)
+    // Update completion circle (85% based on our data)
     updateCompletionCircle(85);
 }
 
 async function loadAuditTrail(type) {
+    console.log('📊 Loading audit trail for type:', type);
     const contentDiv = document.getElementById('auditContent');
-    if (!contentDiv) return;
+    if (!contentDiv) {
+        console.error('❌ auditContent element not found!');
+        return;
+    }
 
     contentDiv.innerHTML = '<div class="loading-spinner"><div class="spinner-ring"></div><span>Loading...</span></div>';
 
     try {
-        const response = await fetch('http://localhost:5000/audit-trail');
+        console.log('🌐 Fetching data from API...');
+        const response = await fetch('http://localhost:5000/public/stats');
         const data = await response.json();
+        console.log('✅ API response received:', { donations: data.donations?.length, supplies: data.supplies?.length });
 
         if (type === 'donations') {
+            console.log('📋 Rendering donations:', data.donations?.length || 0);
             renderDonations(data.donations, contentDiv);
         } else {
+            console.log('📋 Rendering supplies:', data.supplies?.length || 0);
             renderSupplies(data.supplies, contentDiv);
         }
     } catch (error) {
+        console.error('❌ Error loading audit trail:', error);
         // Fallback to mock data when backend is not available
-        console.log('Using mock data for audit trail');
+        console.log('🔄 Using mock data for audit trail');
         loadMockAuditTrail(type, contentDiv);
     }
 }
@@ -291,11 +328,14 @@ function renderDonations(donations, container) {
 }
 
 function renderSupplies(supplies, container) {
+    console.log('📦 Rendering supplies:', supplies?.length || 0, 'items');
     if (!container || !supplies || supplies.length === 0) {
+        console.log('⚠️ No supplies to render');
         if (container) container.innerHTML = '<p>No supplies found</p>';
         return;
     }
 
+    console.log('✅ Rendering supplies data:', supplies);
     const content = supplies.map(supply => {
         const id = supply.id || supply.details?.id || supply.blockchain?.txHash || '';
         const verifyUrl = makeVerifyUrl(id);
@@ -318,17 +358,25 @@ function renderSupplies(supplies, container) {
     }).join('');
 
     container.innerHTML = content;
+    console.log('✅ Supplies rendered successfully');
 }
 
-function getStatusIcon(status) {
-    switch (status) {
-        case 'completed':
-            return '✓';
-        case 'pending':
-            return '⌛';
-        case 'in-transit':
-            return '🔄';
-        default:
-            return '•';
+function loadMockAuditTrail(type, container) {
+    const mockData = {
+        donations: [
+            { id: "DON_MOCK_01", tracking: { status: "completed", createdAt: new Date().toISOString() } },
+            { id: "DON_MOCK_02", tracking: { status: "completed", createdAt: new Date().toISOString() } },
+            { id: "DON_MOCK_03", tracking: { status: "pending", createdAt: new Date().toISOString() } }
+        ],
+        supplies: [
+            { id: "SUP_MOCK_01", tracking: { status: "in_transit", createdAt: new Date().toISOString() } },
+            { id: "SUP_MOCK_02", tracking: { status: "delivered", createdAt: new Date().toISOString() } }
+        ]
+    };
+
+    if (type === 'donations') {
+        renderDonations(mockData.donations, container);
+    } else {
+        renderSupplies(mockData.supplies, container);
     }
 }

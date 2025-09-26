@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // In a real application, you would send the data to your server here
         try {
-            const response = await fetch('/api/relief', {
+            const response = await fetch('http://localhost:5000/donate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
