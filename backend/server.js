@@ -44,6 +44,7 @@ if (!fs.existsSync(LEDGER_FILE)) {
     },
     donations: [],
     supplies: [],
+    feedback: [],
     statistics: {
       totalDonations: 0,
       totalSupplies: 0,
@@ -212,7 +213,7 @@ app.post("/donate", authMiddleware, requireRole("ngo", "admin"), async (req, res
 
     let blockchain = null;
     if (contract) {
-      const tx = await contract.recordDonation(donorName, ethers.parseUnits(String(amount), 'ether'), purpose, txId);
+      const tx = await contract.recordDonation(donorName, amount, purpose, txId);
       blockchain = {
         txHash: tx.hash,
         txId: txId,
